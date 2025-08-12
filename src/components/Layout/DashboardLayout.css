@@ -1,0 +1,22 @@
+.dashboard-layout {
+    display: flex;
+    height: 100vh;
+    background-color: #f5f7fa; /* light background */
+  }
+  
+  /* Main area next to sidebar */
+  .dashboard-main {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+  }
+  
+  /* Content below the navbar */
+  .dashboard-content {
+    flex: 1;
+    padding: 1rem;
+    overflow-y: auto;
+    background-color: #fff; /* white content area */
+    border-top: 1px solid #e0e0e0;
+  }
+  

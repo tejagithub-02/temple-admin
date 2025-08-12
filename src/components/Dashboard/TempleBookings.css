@@ -1,0 +1,163 @@
+/* Main container with alignment for sidebar + navbar */
+.bookings-container {
+    margin-left: 260px; /* space for sidebar */
+    margin-top: 100px; /* space for navbar */
+    padding: 20px;
+    background-color: #f5f7fa;
+    min-height: calc(100vh - 100px);
+    box-sizing: border-box;
+    transition: margin-left 0.3s ease;
+  }
+  
+  /* Header actions (Back + Download) */
+  .actions-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-bottom: 15px;
+  }
+  
+  .back-btn,
+  .download-btn {
+    background: #2a6edc;
+    color: white;
+    padding: 8px 14px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 14px;
+  }
+  
+  .back-btn:hover,
+  .download-btn:hover {
+    background: #1e4bb8;
+  }
+  
+  /* Filters section */
+  .filters {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin: 15px 0;
+  }
+  
+  .filters input,
+  .filters select {
+    padding: 6px 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 14px;
+  }
+  
+  .search-btn,
+  .reset-btn {
+    background: #2a6edc;
+    color: white;
+    padding: 6px 12px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 14px;
+  }
+  
+  .reset-btn {
+    background: #ff9800;
+  }
+  
+  .search-btn:hover {
+    background: #1e4bb8;
+  }
+  
+  .reset-btn:hover {
+    background: #e68a00;
+  }
+  
+  /* Approve all button */
+  .approve-all-btn {
+    background: #28a745;
+    color: white;
+    padding: 8px 14px;
+    border: none;
+    border-radius: 4px;
+    margin-bottom: 10px;
+    cursor: pointer;
+    font-size: 14px;
+  }
+  
+  .approve-all-btn:hover {
+    background: #218838;
+  }
+  
+  /* Table styling */
+  .bookings-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 10px;
+    background: white;
+  }
+  
+  .bookings-table th,
+  .bookings-table td {
+    padding: 10px;
+    border: 1px solid #ddd;
+    text-align: left;
+    font-size: 14px;
+    vertical-align: middle;
+  }
+  
+  .bookings-table th {
+    background: #f0f2f5;
+    font-weight: bold;
+  }
+  
+  .edit-btn {
+    background: #ffc107;
+    color: black;
+    padding: 4px 8px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 13px;
+  }
+  
+  .edit-btn:hover {
+    background: #e0a800;
+  }
+  
+  /* Responsive adjustments */
+  @media (max-width: 1024px) {
+    .bookings-container {
+      margin-left: 0; /* hide sidebar space */
+    }
+  }
+  
+  @media (max-width: 768px) {
+    .bookings-container {
+      padding: 10px;
+      margin-top: 100px;
+    }
+  
+    .bookings-table {
+      display: block;
+      overflow-x: auto;
+      white-space: nowrap;
+    }
+  }
+  .scroll-filters {
+    display: flex;
+    gap: 10px;
+    overflow-x: auto;
+    padding-bottom: 8px;
+  }
+  
+  .scroll-filters::-webkit-scrollbar {
+    height: 6px;
+  }
+  
+  .scroll-filters::-webkit-scrollbar-thumb {
+    background: #ccc;
+    border-radius: 3px;
+  }
+  

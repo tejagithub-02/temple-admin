@@ -1,0 +1,93 @@
+/* ==== GRID LAYOUT ==== */
+.stats-grid {
+    margin-top: 100px; /* below navbar */
+    margin-left: 260px; /* space for sidebar */
+    padding: 20px;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+    gap: 20px;
+    background-color: #f5f7fa;
+    transition: margin-left 0.3s ease;
+  }
+  
+  /* ==== CARD ==== */
+  .stat-card {
+    background: #c7d4ff; /* Light blue like screenshot */
+    padding: 20px;
+    border-radius: 12px;
+    text-align: center;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
+    transition: transform 0.25s ease, box-shadow 0.25s ease;
+  }
+  
+  /* Hover effect */
+  .stat-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.15);
+  }
+  
+  /* ==== HEADINGS ==== */
+  .stat-card h4 {
+    font-size: 15px;
+    font-weight: 500;
+    color: #222;
+    margin-bottom: 8px;
+    letter-spacing: 0.3px;
+  }
+  
+  /* ==== STAT VALUE ==== */
+  .stat-value {
+    font-size: 22px;
+    font-weight: bold;
+    color: #222; /* Dark for contrast */
+    margin-bottom: 6px;
+  }
+  
+  .approved {
+    color: #1e7e34; /* Darker green for better contrast */
+    font-weight: 700;
+  }
+  
+  .pending {
+    color: #d35400; /* Darker orange for better contrast */
+    font-weight: 700;
+  }
+  /* ==== BUTTON ==== */
+  .action-btn {
+    margin-top: 10px;
+    padding: 8px 14px;
+    background: #2a6edc;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    font-size: 13px;
+    cursor: pointer;
+    transition: all 0.25s ease;
+  }
+  
+  .action-btn:hover {
+    background: #1e4bb8;
+    transform: scale(1.05);
+  }
+  
+  /* ==== RESPONSIVE ==== */
+  @media (max-width: 1024px) {
+    .stats-grid {
+      margin-left: 0;
+    }
+  }
+  
+  @media (max-width: 500px) {
+    .stats-grid {
+      grid-template-columns: 1fr;
+    }
+  
+    .stat-card {
+      text-align: center;
+    }
+  
+    .action-btn {
+      width: 100%;
+    }
+  }
+  
