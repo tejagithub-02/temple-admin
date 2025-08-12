@@ -12,23 +12,30 @@ import {
   FaStream,
   FaYoutube,
   FaSignOutAlt,
-  FaBook // Added icon for Publications (Books)
+  FaBook,
+  FaKey // <-- add this here
 } from "react-icons/fa";
 
+
 const DashboardSidebar = ({ isOpen, toggleSidebar }) => {
-  // State to toggle About Us submenu open/close
+  // Existing submenu states
   const [aboutSubmenuOpen, setAboutSubmenuOpen] = useState(false);
-  // State to toggle Publications submenu open/close
   const [publicationsSubmenuOpen, setPublicationsSubmenuOpen] = useState(false);
+  const [sevasSubmenuOpen, setSevasSubmenuOpen] = useState(false);
 
   const toggleAboutSubmenu = (e) => {
-    e.preventDefault(); // prevent navlink navigation on parent click
+    e.preventDefault();
     setAboutSubmenuOpen(!aboutSubmenuOpen);
   };
 
   const togglePublicationsSubmenu = (e) => {
     e.preventDefault();
     setPublicationsSubmenuOpen(!publicationsSubmenuOpen);
+  };
+
+  const toggleSevasSubmenu = (e) => {
+    e.preventDefault();
+    setSevasSubmenuOpen(!sevasSubmenuOpen);
   };
 
   return (
@@ -40,12 +47,41 @@ const DashboardSidebar = ({ isOpen, toggleSidebar }) => {
         <NavLink to="/banner" className="sidebar-link" onClick={toggleSidebar}>
           <FaImage className="sidebar-icon" /> Banner
         </NavLink>
+
         <NavLink to="/add-events" className="sidebar-link" onClick={toggleSidebar}>
           <FaCalendarAlt className="sidebar-icon" /> Add Events
         </NavLink>
-        <NavLink to="/add-sevas" className="sidebar-link" onClick={toggleSidebar}>
-          <FaPrayingHands className="sidebar-icon" /> Add Sevas
+
+        {/* New Recurring Events Link */}
+        <NavLink to="/recurring-events" className="sidebar-link" onClick={toggleSidebar}>
+          <FaCalendarAlt className="sidebar-icon" /> Recurring Events
         </NavLink>
+
+        {/* Sevas Parent Link */}
+        <a href="#sevasSubmenu" className="sidebar-link" onClick={toggleSevasSubmenu}>
+          <FaPrayingHands className="sidebar-icon" /> Add Sevas
+          <span className={`submenu-arrow ${sevasSubmenuOpen ? "open" : ""}`}>▸</span>
+        </a>
+
+        {/* Sevas Submenu */}
+        {sevasSubmenuOpen && (
+          <div className="submenu">
+            <NavLink
+              to="/add-sevas/general"
+              className="sidebar-sublink"
+              onClick={toggleSidebar}
+            >
+              General Sevas
+            </NavLink>
+            <NavLink
+              to="/add-sevas/event-specific"
+              className="sidebar-sublink"
+              onClick={toggleSidebar}
+            >
+              Event-Specific Sevas
+            </NavLink>
+          </div>
+        )}
 
         {/* About Us Parent Link */}
         <a href="#aboutSubmenu" className="sidebar-link about-link" onClick={toggleAboutSubmenu}>
@@ -73,12 +109,12 @@ const DashboardSidebar = ({ isOpen, toggleSidebar }) => {
           </div>
         )}
 
-      
         <NavLink to="/gallery" className="sidebar-link" onClick={toggleSidebar}>
           <FaPhotoVideo className="sidebar-icon" /> Gallery
         </NavLink>
-          {/* Publications Parent Link */}
-          <a
+
+        {/* Publications Parent Link */}
+        <a
           href="#publicationsSubmenu"
           className="sidebar-link publications-link"
           onClick={togglePublicationsSubmenu}
@@ -112,6 +148,9 @@ const DashboardSidebar = ({ isOpen, toggleSidebar }) => {
         </NavLink>
         <NavLink to="/youtube" className="sidebar-link" onClick={toggleSidebar}>
           <FaYoutube className="sidebar-icon" /> YouTube
+        </NavLink>
+        <NavLink to="/change-password" className="sidebar-link" onClick={toggleSidebar}>
+          <FaKey className="sidebar-icon" /> Change Password
         </NavLink>
         <NavLink to="/logout" className="sidebar-link" onClick={toggleSidebar}>
           <FaSignOutAlt className="sidebar-icon" /> Logout

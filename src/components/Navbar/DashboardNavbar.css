@@ -1,47 +1,90 @@
 .dashboard-navbar {
-    position: fixed; /* stays on top */
-    top: 0;
-    left: 0;
-    width: 100%;
-    display: flex;
-    align-items: center;
-    background: linear-gradient(90deg, #1e3c72, #2a6edc);
-    color: white;
-    padding: 0 20px;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  background: linear-gradient(90deg, #1e3c72, #2a6edc);
+  color: white;
+  padding: 0 15px;
+  height: 100px; /* Reduced to fit mobile */
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+  z-index: 1001;
+}
+
+.navbar-toggle {
+  background: none;
+  border: none;
+  color: white;
+  font-size: 26px;
+  cursor: pointer;
+  margin-right: 15px;
+}
+
+.hamburger-icon {
+  font-weight: bold;
+  display: block;
+  line-height: 1;
+}
+
+.navbar-logo-title {
+  display: flex;
+  align-items: center;
+}
+
+.navbar-logo {
+  height: 80px; /* Slightly smaller */
+  margin-right: 10px;
+  border-radius: 5px;
+  object-fit: contain;
+}
+
+.navbar-title {
+  font-size: 24px;
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+/* Mobile Responsiveness */
+@media (max-width: 768px) {
+  .dashboard-navbar {
     height: 100px;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
-    z-index: 1001;
+    padding: 0 10px;
   }
-  
-  .navbar-toggle {
-    background: none;
-    border: none;
-    color: white;
-    font-size: 30px;
-    cursor: pointer;
-    margin-right: 20px;
-  }
-  
-  .hamburger-icon {
-    font-weight: bold;
-    display: block;
-    line-height: 1;
-  }
-  
-  .navbar-logo-title {
-    display: flex;
-    align-items: center;
-  }
-  
+
   .navbar-logo {
-    height: 90px;
-    margin-right: 15px;
-    border-radius: 5px;
-    object-fit: contain;
+    height: 70px;
+    margin-right: 8px;
   }
-  
+
+ 
+
+  .navbar-toggle {
+    font-size: 22px;
+    margin-right: 10px;
+  }
+}
+
+/* Very Small Devices */
+@media (max-width: 768px) {
+  .navbar-logo-title {
+    flex-wrap: wrap; /* allow text to move down */
+  }
+
+  .navbar-title {
+    font-size: 34px;
+    white-space: normal; /* allow wrapping */
+  }
+}
+
+@media (max-width: 480px) {
   .navbar-title {
     font-size: 20px;
-    font-weight: 700;
-    white-space: nowrap;
+    white-space: normal; /* wrap instead of truncate */
+    overflow: visible;
+    text-overflow: unset;
+    max-width: none;
   }
+}
+
