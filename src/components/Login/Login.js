@@ -16,8 +16,6 @@ export default function Login({ setIsAuthenticated }) {
       navigate("/dashboard");
     }
   };
-  
-
   return (
     <div className="auth-container">
       <form className="auth-form" onSubmit={handleLogin}>

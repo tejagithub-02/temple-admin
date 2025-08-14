@@ -1,13 +1,22 @@
+/* Base styles - for mobile & tablet */
 .recurring-event-container {
-    margin-top: 100px;
-    margin-left: 250px;
-    padding: 30px;
-    min-height: calc(100vh - 100px);
-    background-color: #f8fafc;
-    transition: margin-left 0.3s ease;
-    font-family: Arial, sans-serif;
+  padding: 30px;
+  min-height: calc(100vh - 100px);
+  background-color: #f8fafc;
+  transition: margin-left 0.3s ease;
+  font-family: Arial, sans-serif;
+}
+
+@media (min-width: 1024px) {
+  .recurring-event-container {
+    max-width: 800px;
+    margin: 100px auto;
+    position: relative;
+    left:10%; /* pushes the whole container 50px right */
   }
-  
+}
+
+
   h2 {
     font-size: 28px;
     color: #1e3a8a;

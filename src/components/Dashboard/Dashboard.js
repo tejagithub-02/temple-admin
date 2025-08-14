@@ -22,7 +22,9 @@ const DashboardStats = () => {
         <h4>EVENTS</h4>
         <p className="pending">3 Pending</p>
         <p className="approved">24 Approved</p>
-        <button className="action-btn">Review Event Bookings</button>
+        <Link to="/event-bookings" className="action-btn">
+          Review Event Bookings
+        </Link>
       </div>
 
       <div className="stat-card">

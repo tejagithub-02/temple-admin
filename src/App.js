@@ -5,5 +5,4 @@ function App() {
     <Routers/>
   );
 }
-
 export default App;

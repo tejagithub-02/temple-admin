@@ -1,0 +1,123 @@
+/* Main Page Container */
+.eventbookings-page {
+    margin-top: 100px; /* space below top navbar */
+    margin-left: 250px; /* space for sidebar on large screens */
+    padding: 20px;
+    min-height: calc(100vh - 100px);
+    background-color: #f8fafc;
+    transition: margin-left 0.3s ease;
+  }
+  
+  /* For screens with collapsed sidebar */
+  @media (max-width: 992px) {
+    .eventbookings-page {
+      margin-left: 0;
+      padding: 15px;
+    }
+  }
+  
+  /* Container */
+  .eventbookings-container {
+    background: #fff;
+    border-radius: 10px;
+    padding: 20px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+  }
+  
+  /* Top Buttons */
+  .top-buttons {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    justify-content: space-between;
+    margin-bottom: 15px;
+  }
+  
+  .top-buttons button {
+    white-space: nowrap;
+  }
+  
+  /* Page Title */
+  .page-title {
+    font-size: 1.4rem;
+    font-weight: 600;
+    margin-bottom: 20px;
+    color: #333;
+  }
+  
+  /* Filter Card */
+  .filter-card {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    background: #f1f5f9;
+    padding: 15px;
+    border-radius: 8px;
+    margin-bottom: 20px;
+  }
+  
+  .filter-card input,
+  .filter-card select {
+    flex: 1 1 180px;
+    padding: 8px 10px;
+    border: 1px solid #cbd5e1;
+    border-radius: 5px;
+  }
+  
+  .filter-card button {
+    flex: 0 0 auto;
+  }
+  
+  /* Approve All Button Section */
+  .approve-all {
+    display: flex;
+    justify-content: flex-end;
+    margin-bottom: 15px;
+  }
+  
+  /* Table Wrapper */
+  .table-wrapper {
+    overflow-x: auto;
+  }
+  
+  /* Table Styling */
+  .custom-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.9rem;
+  }
+  
+  .custom-table th,
+  .custom-table td {
+    border: 1px solid #e2e8f0;
+    padding: 10px;
+    text-align: left;
+  }
+  
+  .custom-table th {
+    background: #f8fafc;
+    font-weight: 600;
+  }
+  
+  .status-approved {
+    color: #16a34a;
+    font-weight: 500;
+  }
+  
+  /* Buttons in table */
+  .btn-sm {
+    padding: 5px 10px;
+    font-size: 0.8rem;
+  }
+  
+  /* Responsive Adjustments */
+  @media (max-width: 768px) {
+    .filter-card {
+      flex-direction: column;
+    }
+    .top-buttons {
+      flex-direction: column;
+      align-items: flex-start;
+    }
+  }
+  
