@@ -93,7 +93,7 @@
 -------------------------- */
 .auth-container {
     min-height: 100vh;
-    background: linear-gradient(135deg, #1e3a8a, #3b82f6);
+   
     display: flex;
     justify-content: center;
     align-items: center;

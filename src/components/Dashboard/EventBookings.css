@@ -1,123 +1,192 @@
-/* Main Page Container */
-.eventbookings-page {
-    margin-top: 100px; /* space below top navbar */
-    margin-left: 250px; /* space for sidebar on large screens */
+/* Base Styles */
+.eventbookings-container {
     padding: 20px;
-    min-height: calc(100vh - 100px);
-    background-color: #f8fafc;
-    transition: margin-left 0.3s ease;
-  }
-  
-  /* For screens with collapsed sidebar */
-  @media (max-width: 992px) {
-    .eventbookings-page {
-      margin-left: 0;
-      padding: 15px;
-    }
-  }
-  
-  /* Container */
-  .eventbookings-container {
-    background: #fff;
-    border-radius: 10px;
-    padding: 20px;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+    max-width: 1400px;
+    margin: 0 auto;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
   }
   
   /* Top Buttons */
   .top-buttons {
     display: flex;
+    justify-content: space-between;
+    margin-bottom: 20px;
     flex-wrap: wrap;
     gap: 10px;
-    justify-content: space-between;
-    margin-bottom: 15px;
-  }
-  
-  .top-buttons button {
-    white-space: nowrap;
   }
   
   /* Page Title */
   .page-title {
-    font-size: 1.4rem;
-    font-weight: 600;
-    margin-bottom: 20px;
+    margin: 20px 0;
+    font-size: 24px;
     color: #333;
+    font-weight: 600;
   }
   
   /* Filter Card */
   .filter-card {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 10px;
-    background: #f1f5f9;
-    padding: 15px;
+    background: #f8f9fa;
+    padding: 20px;
     border-radius: 8px;
     margin-bottom: 20px;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 15px;
+    align-items: flex-end;
+  }
+  
+  .filter-group {
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .filter-group label {
+    margin-bottom: 5px;
+    font-size: 14px;
+    color: #555;
+    font-weight: 500;
   }
   
   .filter-card input,
   .filter-card select {
-    flex: 1 1 180px;
-    padding: 8px 10px;
-    border: 1px solid #cbd5e1;
-    border-radius: 5px;
+    padding: 8px 12px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 14px;
+    width: 100%;
   }
   
-  .filter-card button {
-    flex: 0 0 auto;
-  }
-  
-  /* Approve All Button Section */
-  .approve-all {
+  .filter-actions {
     display: flex;
-    justify-content: flex-end;
-    margin-bottom: 15px;
+    gap: 10px;
+    align-self: flex-end;
   }
   
-  /* Table Wrapper */
-  .table-wrapper {
+  /* Approve All Button */
+  .approve-all {
+    margin-bottom: 20px;
+  }
+  
+  /* Table Styles */
+  .table-responsive {
+    width: 100%;
     overflow-x: auto;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.05);
+    border-radius: 8px;
   }
   
-  /* Table Styling */
   .custom-table {
     width: 100%;
     border-collapse: collapse;
-    font-size: 0.9rem;
-  }
-  
-  .custom-table th,
-  .custom-table td {
-    border: 1px solid #e2e8f0;
-    padding: 10px;
-    text-align: left;
+    min-width: 800px;
   }
   
   .custom-table th {
-    background: #f8fafc;
+    background-color: #f0f2f5;
+    padding: 12px 15px;
+    text-align: left;
     font-weight: 600;
+    color: #444;
+    font-size: 14px;
   }
   
+  .custom-table td {
+    padding: 12px 15px;
+    border-bottom: 1px solid #e0e0e0;
+    color: #555;
+    font-size: 14px;
+  }
+  
+  .custom-table tr:last-child td {
+    border-bottom: none;
+  }
+  
+  .custom-table tr:hover {
+    background-color: #f9f9f9;
+  }
+  
+  /* Status Badge */
   .status-approved {
-    color: #16a34a;
+    color: #28a745;
     font-weight: 500;
   }
   
-  /* Buttons in table */
+  /* Buttons */
+  .btn {
+    padding: 8px 16px;
+    border-radius: 4px;
+    font-size: 14px;
+    cursor: pointer;
+    border: none;
+    transition: all 0.3s ease;
+  }
+  
+  .btn-primary {
+    background-color: #007bff;
+    color: white;
+  }
+  
+  .btn-primary:hover {
+    background-color: #0069d9;
+  }
+  
+  .btn-secondary {
+    background-color: #6c757d;
+    color: white;
+  }
+  
+  .btn-secondary:hover {
+    background-color: #5a6268;
+  }
+  
+  .btn-success {
+    background-color: #28a745;
+    color: white;
+  }
+  
+  .btn-success:hover {
+    background-color: #218838;
+  }
+  
   .btn-sm {
     padding: 5px 10px;
-    font-size: 0.8rem;
+    font-size: 13px;
   }
   
   /* Responsive Adjustments */
   @media (max-width: 768px) {
     .filter-card {
-      flex-direction: column;
+      grid-template-columns: 1fr 1fr;
     }
-    .top-buttons {
-      flex-direction: column;
-      align-items: flex-start;
+    
+    .filter-actions {
+      grid-column: span 2;
     }
   }
   
+  @media (max-width: 576px) {
+    .filter-card {
+      grid-template-columns: 1fr;
+    }
+    
+    .filter-actions {
+      grid-column: span 1;
+    }
+    
+    .top-buttons {
+      flex-direction: column;
+    }
+    
+    .custom-table th,
+    .custom-table td {
+      padding: 8px 10px;
+      font-size: 13px;
+    }
+    
+    .email-cell {
+      max-width: 120px;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+  }

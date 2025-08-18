@@ -18,7 +18,7 @@ export default function EventBookings() {
       seva: "Lakshmi Pooja",
       date: "2025-07-02",
       amount: 200.0,
-      payment: "Online",
+      payment: "QR Code Payment",
       status: "Approved",
     },
     {
@@ -51,7 +51,7 @@ export default function EventBookings() {
       seva: "Gapapati pooja",
       date: "2025-07-01",
       amount: 100.0,
-      payment: "Cash",
+      payment: "QR Code Payment",
       status: "Approved",
     },
   ];
@@ -94,30 +94,37 @@ export default function EventBookings() {
   };
 
   return (
-    <div className="eventbookings-page">
-      <div className="eventbookings-container">
-        {/* Top buttons */}
-        <div className="top-buttons">
-          <button className="btn btn-secondary">← Back to Dashboard</button>
-          <button className="btn btn-primary">Download CSV</button>
-        </div>
+    <div className="eventbookings-container">
+      {/* Top buttons */}
+      <div className="top-buttons">
+        <button className="btn btn-secondary">← Back to Dashboard</button>
+        <button className="btn btn-primary">Download CSV</button>
+      </div>
 
-        <h3 className="page-title">Event Bookings</h3>
+      <h3 className="page-title">Event Bookings</h3>
 
-        {/* Filters */}
-        <div className="filter-card">
+      {/* Filters */}
+      <div className="filter-card">
+        <div className="filter-group">
+          <label>From Date</label>
           <input
             type="date"
             name="from"
             value={filters.from}
             onChange={handleFilterChange}
           />
+        </div>
+        <div className="filter-group">
+          <label>To Date</label>
           <input
             type="date"
             name="to"
             value={filters.to}
             onChange={handleFilterChange}
           />
+        </div>
+        <div className="filter-group">
+          <label>Seva</label>
           <input
             type="text"
             name="seva"
@@ -125,63 +132,69 @@ export default function EventBookings() {
             onChange={handleFilterChange}
             placeholder="Search seva..."
           />
+        </div>
+        <div className="filter-group">
+          <label>Payment</label>
           <select
             name="payment"
             value={filters.payment}
             onChange={handleFilterChange}
           >
             <option value="All">All Payments</option>
+            <option value="QR Code Payment">QR Code Payment</option>
             <option value="Cash">Cash</option>
             <option value="Online">Online</option>
           </select>
+        </div>
+        <div className="filter-actions">
           <button className="btn btn-primary">Search</button>
           <button className="btn btn-secondary" onClick={resetFilters}>
             Reset
           </button>
         </div>
+      </div>
 
-        {/* Approve All */}
-        <div className="approve-all">
-          <button className="btn btn-success">Approve All Pending</button>
-        </div>
+      {/* Approve All */}
+      <div className="approve-all">
+        <button className="btn btn-success">Approve All Pending</button>
+      </div>
 
-        {/* Table */}
-        <div className="table-wrapper">
-          <table className="custom-table">
-            <thead>
-              <tr>
-                <th>ID</th>
-                <th>NAME</th>
-                <th>EMAIL</th>
-                <th>MOBILE</th>
-                <th>SEVA</th>
-                <th>DATE</th>
-                <th>AMOUNT</th>
-                <th>PAYMENT</th>
-                <th>STATUS</th>
-                <th>ACTION</th>
+      {/* Table */}
+      <div className="table-responsive">
+        <table className="custom-table">
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>NAME</th>
+              <th>EMAIL</th>
+              <th>MOBILE</th>
+              <th>SEVA</th>
+              <th>DATE</th>
+              <th>AMOUNT</th>
+              <th>PAYMENT</th>
+              <th>STATUS</th>
+              <th>ACTION</th>
+            </tr>
+          </thead>
+          <tbody>
+            {filteredData().map((b) => (
+              <tr key={b.id}>
+                <td>{b.id}</td>
+                <td>{b.name}</td>
+                <td className="email-cell">{b.email}</td>
+                <td>{b.mobile}</td>
+                <td>{b.seva}</td>
+                <td>{b.date}</td>
+                <td>₹{b.amount.toFixed(2)}</td>
+                <td>{b.payment}</td>
+                <td className="status-approved">{b.status}</td>
+                <td>
+                  <button className="btn btn-primary btn-sm">Edit</button>
+                </td>
               </tr>
-            </thead>
-            <tbody>
-              {filteredData().map((b) => (
-                <tr key={b.id}>
-                  <td>{b.id}</td>
-                  <td>{b.name}</td>
-                  <td>{b.email}</td>
-                  <td>{b.mobile}</td>
-                  <td>{b.seva}</td>
-                  <td>{b.date}</td>
-                  <td>{b.amount.toFixed(2)}</td>
-                  <td>{b.payment}</td>
-                  <td className="status-approved">{b.status}</td>
-                  <td>
-                    <button className="btn btn-primary btn-sm">Edit</button>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
+            ))}
+          </tbody>
+        </table>
       </div>
     </div>
   );

@@ -52,14 +52,7 @@ export default function ChangePassword() {
 
         <button type="submit" className="auth-btn">Update Password</button>
 
-        {/* Back Button Below */}
-        <button
-          type="button"
-          className="back-btn bottom"
-          onClick={() => navigate(-1)}
-        >
-          <FaArrowLeft style={{ marginRight: "6px" }} /> Back
-        </button>
+      
       </form>
     </div>
   );

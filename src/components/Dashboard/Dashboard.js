@@ -31,7 +31,9 @@ const DashboardStats = () => {
         <h4>SEVAS</h4>
         <p className="pending">0 Pending</p>
         <p className="approved">1 Approved</p>
-        <button className="action-btn">Review Seva Bookings</button>
+        <Link to="/seva-bookings" className="action-btn">
+          Review Seva Bookings
+        </Link>
       </div>
     </div>
   );
