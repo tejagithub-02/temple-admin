@@ -1,5 +1,5 @@
-import React, { useState } from "react";
-import { NavLink } from "react-router-dom";
+import React from "react";
+import { NavLink, useNavigate } from "react-router-dom"; // ✅ added useNavigate
 import "./DashboardSidebar.css";
 
 import {
@@ -13,12 +13,11 @@ import {
   FaYoutube,
   FaSignOutAlt,
   FaBook,
-  FaKey // <-- add this here
+  FaKey
 } from "react-icons/fa";
 
-
 const DashboardSidebar = ({ isOpen, toggleSidebar }) => {
-  const navigate = useNavigate();
+  const navigate = useNavigate(); // ✅ now works
 
   const handleLogout = () => {
     // Clear auth storage (adjust as per your app)
@@ -28,13 +27,14 @@ const DashboardSidebar = ({ isOpen, toggleSidebar }) => {
     // Redirect to login page
     navigate("/login");
   };
-  
+
   return (
     <div className={`dashboard-sidebar ${isOpen ? "open" : ""}`}>
       <nav className="sidebar-nav">
         <NavLink to="/dashboard" className="sidebar-link" onClick={toggleSidebar}>
           <FaTachometerAlt className="sidebar-icon" /> Dashboard
         </NavLink>
+
         <NavLink to="/banner" className="sidebar-link" onClick={toggleSidebar}>
           <FaImage className="sidebar-icon" /> Banner
         </NavLink>
@@ -44,20 +44,16 @@ const DashboardSidebar = ({ isOpen, toggleSidebar }) => {
         </NavLink>
 
         <NavLink to="/add-sevas" className="sidebar-link" onClick={toggleSidebar}>
-        <FaPrayingHands className="sidebar-icon" /> Add Sevas
+          <FaPrayingHands className="sidebar-icon" /> Add Sevas
         </NavLink>
 
-        {/* New Recurring Events Link */}
         <NavLink to="/recurring-events" className="sidebar-link" onClick={toggleSidebar}>
-        <FaCalendarAlt className="sidebar-icon" /> Recurring Events
+          <FaCalendarAlt className="sidebar-icon" /> Recurring Events
         </NavLink>
-
 
         <NavLink to="/aboutus" className="sidebar-link" onClick={toggleSidebar}>
-        <FaInfoCircle className="sidebar-icon" /> About Us 
+          <FaInfoCircle className="sidebar-icon" /> About Us
         </NavLink>
-
-        
 
         <NavLink to="/gallery" className="sidebar-link" onClick={toggleSidebar}>
           <FaPhotoVideo className="sidebar-icon" /> Gallery
@@ -70,17 +66,21 @@ const DashboardSidebar = ({ isOpen, toggleSidebar }) => {
         <NavLink to="/scrolling" className="sidebar-link" onClick={toggleSidebar}>
           <FaStream className="sidebar-icon" /> Scrolling
         </NavLink>
+
         <NavLink to="/youtube" className="sidebar-link" onClick={toggleSidebar}>
           <FaYoutube className="sidebar-icon" /> YouTube
         </NavLink>
+
         <NavLink to="/change-password" className="sidebar-link" onClick={toggleSidebar}>
           <FaKey className="sidebar-icon" /> Change Password
         </NavLink>
+
+        {/* ✅ Fixed logout NavLink */}
         <NavLink
           to="/logout"
           className="sidebar-link"
           onClick={(e) => {
-            e.preventDefault(); // stop NavLink navigation
+            e.preventDefault(); // stop NavLink default
             toggleSidebar();
             handleLogout();
           }}
