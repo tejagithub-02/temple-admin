@@ -1,8 +1,29 @@
-import Routers from './components/Routers/Routers';
+// import Routers from './components/Routers/Routers';
+
+// function App() {
+//   return (
+//     <Routers/>
+//   );
+// }
+// export default App;
+
+
+
+
+import { useState } from "react";
+import Routers from "./components/Routers/Routers";
 
 function App() {
+  const [isAuthenticated, setIsAuthenticated] = useState(
+    localStorage.getItem("isLoggedIn") === "true"
+  );
+
   return (
-    <Routers/>
+    <Routers 
+      isAuthenticated={isAuthenticated} 
+      setIsAuthenticated={setIsAuthenticated} 
+    />
   );
 }
+
 export default App;

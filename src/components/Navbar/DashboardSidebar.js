@@ -18,8 +18,16 @@ import {
 
 
 const DashboardSidebar = ({ isOpen, toggleSidebar }) => {
-  // Existing submenu states
-  
+  const navigate = useNavigate();
+
+  const handleLogout = () => {
+    // Clear auth storage (adjust as per your app)
+    localStorage.removeItem("token");
+    sessionStorage.clear();
+
+    // Redirect to login page
+    navigate("/login");
+  };
   
   return (
     <div className={`dashboard-sidebar ${isOpen ? "open" : ""}`}>
@@ -59,10 +67,6 @@ const DashboardSidebar = ({ isOpen, toggleSidebar }) => {
           <FaBook className="sidebar-icon" /> Publications
         </NavLink>
 
-        
-
-       
-
         <NavLink to="/scrolling" className="sidebar-link" onClick={toggleSidebar}>
           <FaStream className="sidebar-icon" /> Scrolling
         </NavLink>
@@ -72,7 +76,15 @@ const DashboardSidebar = ({ isOpen, toggleSidebar }) => {
         <NavLink to="/change-password" className="sidebar-link" onClick={toggleSidebar}>
           <FaKey className="sidebar-icon" /> Change Password
         </NavLink>
-        <NavLink to="/logout" className="sidebar-link" onClick={toggleSidebar}>
+        <NavLink
+          to="/logout"
+          className="sidebar-link"
+          onClick={(e) => {
+            e.preventDefault(); // stop NavLink navigation
+            toggleSidebar();
+            handleLogout();
+          }}
+        >
           <FaSignOutAlt className="sidebar-icon" /> Logout
         </NavLink>
       </nav>

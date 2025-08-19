@@ -28,7 +28,7 @@ export default function Signup() {
     localStorage.setItem("userPassword", password);
 
     alert("Account created successfully! Please login.");
-    navigate("/"); // redirect to Login page
+    navigate("/login"); // redirect to Login page
   };
 
   return (
@@ -82,7 +82,7 @@ export default function Signup() {
 
         <button type="submit" className="auth-btn">Sign Up</button>
         <p className="auth-link">
-          Already have an account? <Link to="/">Login</Link>
+          Already have an account? <Link to="/login">Login</Link>
         </p>
       </form>
     </div>
