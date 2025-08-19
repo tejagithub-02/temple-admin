@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import "./EventBookings.css";
 
-export default function SevaBookings() {
+export default function TempleBookings() {
   const [filters, setFilters] = useState({
     seva: "",
     fromDate: "",   
@@ -9,7 +9,7 @@ export default function SevaBookings() {
     status: "All",
     payment: "All",
   });
-  const [bookings, setBookings] = useState([
+  const [bookings] = useState([
     {
       id: 1,
       name: "Ravi",
@@ -81,12 +81,7 @@ export default function SevaBookings() {
 
   const totalAmount = filteredBookings.reduce((sum, b) => sum + b.amount, 0);
 
-  const approveAll = () => {
-    const updatedBookings = bookings.map((b) =>
-      b.status === "Pending" ? { ...b, status: "Approved" } : b
-    );
-    setBookings(updatedBookings);
-  };
+ 
 
   const downloadCSV = () => {
     const headers = [

@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import "./EventBookings.css";
 
-export default function SevaBookings() {
+export default function EventBookings() {
   const [filters, setFilters] = useState({
     seva: "",
     fromDate: "",   
