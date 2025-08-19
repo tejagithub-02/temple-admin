@@ -1,192 +1,290 @@
-/* Base Styles */
-.eventbookings-container {
-    padding: 20px;
-    max-width: 1400px;
-    margin: 0 auto;
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+.seva-bookings {
+  padding: 20px;
+  font-family: Arial, sans-serif;
+  background-color: #f4f7f9;
+  /* Increased max-width to give more space for the table */
+  max-width: calc(100vw - 100px); /* Example: Adjust this value as needed */
+  margin-left: 240px; 
+  margin-top: 100px;
+}
+
+.page-heading {
+  color: #333;
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.filters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+  justify-content: center;
+  align-items: flex-end;
+  background-color: #fff;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  margin-bottom: 30px;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+}
+
+.form-group label {
+  font-weight: bold;
+  margin-bottom: 5px;
+  color: #555;
+}
+
+.form-group input,
+.form-group select {
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: 14px;
+  width: 200px;
+}
+
+.btn {
+  padding: 10px 15px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-weight: bold;
+  transition: background-color 0.3s ease;
+}
+
+.btn-primary {
+  background-color: #007bff;
+  color: white;
+}
+
+.btn-primary:hover {
+  background-color: #0056b3;
+}
+
+.btn-sm {
+  font-size: 12px;
+  padding: 5px 10px;
+}
+
+.table-container {
+  overflow-x: auto;
+  border-radius: 8px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  background-color: #fff;
+}
+
+.custom-table {
+  width: 100%;
+  min-width: 1200px; /* Added a minimum width to the table itself */
+  border-collapse: collapse;
+  white-space: nowrap;
+}
+
+.custom-table th,
+.custom-table td {
+  padding: 12px 15px;
+  border-bottom: 1px solid #ddd;
+  text-align: left;
+}
+
+.custom-table th {
+  background-color: #f0f0f0;
+  color: #333;
+  font-weight: bold;
+  text-transform: uppercase;
+}
+
+.custom-table tr:hover {
+  background-color: #f9f9f9;
+}
+
+.email-cell {
+  min-width: 200px;
+}
+
+.status-pending {
+  color: #ffa500;
+  font-weight: bold;
+}
+
+.status-approved {
+  color: #28a745;
+  font-weight: bold;
+}
+
+.status-rejected {
+  color: #dc3545;
+  font-weight: bold;
+}
+
+.custom-table img {
+  border-radius: 4px;
+  border: 1px solid #ccc;
+}
+@media (max-width: 768px) 
+{
+  .seva-bookings
+  {
+    margin-left: 0px;
   }
-  
-  /* Top Buttons */
-  .top-buttons {
-    display: flex;
-    justify-content: space-between;
-    margin-bottom: 20px;
-    flex-wrap: wrap;
-    gap: 10px;
-  }
-  
-  /* Page Title */
-  .page-title {
-    margin: 20px 0;
-    font-size: 24px;
-    color: #333;
-    font-weight: 600;
-  }
-  
-  /* Filter Card */
-  .filter-card {
-    background: #f8f9fa;
-    padding: 20px;
-    border-radius: 8px;
-    margin-bottom: 20px;
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-    gap: 15px;
-    align-items: flex-end;
-  }
-  
-  .filter-group {
-    display: flex;
+}
+/* ===== Extra Enhancements ===== */
+
+/* Page Heading Glow */
+.page-heading {
+  font-size: 28px;
+  letter-spacing: 1px;
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1);
+}
+
+/* Filters Card Animation */
+.filters {
+  transition: transform 0.2s ease, box-shadow 0.3s ease;
+}
+.filters:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
+}
+
+/* Inputs focus effect */
+.form-group input:focus,
+.form-group select:focus {
+  border-color: #007bff;
+  outline: none;
+  box-shadow: 0 0 5px rgba(0, 123, 255, 0.3);
+}
+
+/* Buttons Hover Lift */
+.btn {
+  transform: translateY(0);
+  transition: transform 0.2s ease, background-color 0.3s ease;
+}
+.btn:hover {
+  transform: translateY(-2px);
+}
+
+/* Approve / Reject badge styles */
+.status-pending::before,
+.status-approved::before,
+.status-rejected::before {
+  content: "● ";
+  font-size: 14px;
+}
+.status-pending::before {
+  color: #ffa500;
+}
+.status-approved::before {
+  color: #28a745;
+}
+.status-rejected::before {
+  color: #dc3545;
+}
+
+/* Table header sticky */
+.table-container {
+  max-height: 500px; /* keep only table scroll */
+  overflow-y: auto;
+}
+.custom-table th {
+  position: sticky;
+  top: 0;
+  z-index: 2;
+}
+
+/* Row hover animation */
+.custom-table tr {
+  transition: background-color 0.2s ease;
+}
+.custom-table tr:hover {
+  background-color: #eef6ff;
+}
+
+/* Small screen adjustments */
+@media (max-width: 768px) {
+  .filters {
     flex-direction: column;
+    align-items: stretch;
   }
-  
-  .filter-group label {
-    margin-bottom: 5px;
-    font-size: 14px;
-    color: #555;
-    font-weight: 500;
-  }
-  
-  .filter-card input,
-  .filter-card select {
-    padding: 8px 12px;
-    border: 1px solid #ddd;
-    border-radius: 4px;
-    font-size: 14px;
+  .form-group input,
+  .form-group select {
     width: 100%;
   }
-  
-  .filter-actions {
-    display: flex;
-    gap: 10px;
-    align-self: flex-end;
-  }
-  
-  /* Approve All Button */
-  .approve-all {
-    margin-bottom: 20px;
-  }
-  
-  /* Table Styles */
-  .table-responsive {
-    width: 100%;
-    overflow-x: auto;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.05);
-    border-radius: 8px;
-  }
-  
   .custom-table {
-    width: 100%;
-    border-collapse: collapse;
-    min-width: 800px;
-  }
-  
-  .custom-table th {
-    background-color: #f0f2f5;
-    padding: 12px 15px;
-    text-align: left;
-    font-weight: 600;
-    color: #444;
-    font-size: 14px;
-  }
-  
-  .custom-table td {
-    padding: 12px 15px;
-    border-bottom: 1px solid #e0e0e0;
-    color: #555;
-    font-size: 14px;
-  }
-  
-  .custom-table tr:last-child td {
-    border-bottom: none;
-  }
-  
-  .custom-table tr:hover {
-    background-color: #f9f9f9;
-  }
-  
-  /* Status Badge */
-  .status-approved {
-    color: #28a745;
-    font-weight: 500;
-  }
-  
-  /* Buttons */
-  .btn {
-    padding: 8px 16px;
-    border-radius: 4px;
-    font-size: 14px;
-    cursor: pointer;
-    border: none;
-    transition: all 0.3s ease;
-  }
-  
-  .btn-primary {
-    background-color: #007bff;
-    color: white;
-  }
-  
-  .btn-primary:hover {
-    background-color: #0069d9;
-  }
-  
-  .btn-secondary {
-    background-color: #6c757d;
-    color: white;
-  }
-  
-  .btn-secondary:hover {
-    background-color: #5a6268;
-  }
-  
-  .btn-success {
-    background-color: #28a745;
-    color: white;
-  }
-  
-  .btn-success:hover {
-    background-color: #218838;
-  }
-  
-  .btn-sm {
-    padding: 5px 10px;
     font-size: 13px;
   }
-  
-  /* Responsive Adjustments */
-  @media (max-width: 768px) {
-    .filter-card {
-      grid-template-columns: 1fr 1fr;
-    }
-    
-    .filter-actions {
-      grid-column: span 2;
-    }
+}
+/* ===== Approve All & Total Amount Styles ===== */
+.approve-total {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+  padding: 15px 20px;
+  background-color: #fff;
+  border-radius: 8px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+.approve-total .btn-success {
+  background-color: #28a745;
+  color: #fff;
+  padding: 10px 20px;
+  font-weight: bold;
+  border-radius: 6px;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.approve-total .btn-success:hover {
+  background-color: #218838;
+  transform: translateY(-2px);
+}
+
+.total-amount {
+  font-size: 18px;
+  font-weight: bold;
+  color: #333;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .approve-total {
+    flex-direction: column;
+    gap: 10px;
+    align-items: stretch;
   }
-  
-  @media (max-width: 576px) {
-    .filter-card {
-      grid-template-columns: 1fr;
-    }
-    
-    .filter-actions {
-      grid-column: span 1;
-    }
-    
-    .top-buttons {
-      flex-direction: column;
-    }
-    
-    .custom-table th,
-    .custom-table td {
-      padding: 8px 10px;
-      font-size: 13px;
-    }
-    
-    .email-cell {
-      max-width: 120px;
-      overflow: hidden;
-      text-overflow: ellipsis;
-      white-space: nowrap;
-    }
+  .total-amount {
+    text-align: center;
   }
+}
+
+/* CSV Download Button */
+.btn-info {
+  background-color: #17a2b8; /* Teal/blue */
+  color: #fff;
+  padding: 8px 16px;
+  font-size: 14px;
+  font-weight: 500;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background 0.3s, transform 0.2s;
+}
+
+.btn-info:hover {
+  background-color: #138496; /* Darker teal */
+  transform: translateY(-2px);
+}
+
+.btn-info:active {
+  background-color: #117a8b; /* Even darker on click */
+  transform: translateY(0);
+}
+
+.btn-info:focus {
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(23, 162, 184, 0.4);
+}

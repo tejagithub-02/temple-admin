@@ -1,17 +1,9 @@
-// import Routers from './components/Routers/Routers';
-
-// function App() {
-//   return (
-//     <Routers/>
-//   );
-// }
-// export default App;
-
 
 
 
 import { useState } from "react";
 import Routers from "./components/Routers/Routers";
+
 
 function App() {
   const [isAuthenticated, setIsAuthenticated] = useState(

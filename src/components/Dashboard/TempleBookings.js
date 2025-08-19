@@ -1,184 +1,295 @@
-import React, { useState, useEffect } from "react";
-import "./TempleBookings.css";
+import React, { useState } from "react";
+import "./EventBookings.css";
 
-const TempleBookings = () => {
-  const [bookings, setBookings] = useState([]);
-  const [filteredBookings, setFilteredBookings] = useState([]);
-  const [fromDate, setFromDate] = useState("");
-  const [toDate, setToDate] = useState("");
-  const [searchTerm, setSearchTerm] = useState("");
-  const [paymentFilter, setPaymentFilter] = useState("All");
+export default function SevaBookings() {
+  const [filters, setFilters] = useState({
+    seva: "",
+    fromDate: "",   
+    toDate: "",     
+    status: "All",
+    payment: "All",
+  });
+  const [bookings, setBookings] = useState([
+    {
+      id: 1,
+      name: "Ravi",
+      email: "t@example.com",
+      mobile: "9876543210",
+      seva: "Abhishekam",
+      sevadate: "2025-08-20",
+      gotra: "Kashyapa",
+      nakshatra: "Rohini",
+      raashi: "Vrishabha",
+      district: "Hyderabad",
+      state: "Telangana",
+      address: "Ameerpet, Hyderabad",
+      pincode: "500016",
+      
+      amount: 1000,
+      payment: "Online",
+    
+      status: "Approved",
+    },
+    {
+      id: 2,
+      name: "Priya",
+      email: "priya@example.com",
+      mobile: "9876501234",
+      seva: "Archana",
+      sevadate: "2025-08-21",
+      gotra: "Vasishta",
+      nakshatra: "Ashwini",
+      raashi: "Mesha",
+      district: "Chennai",
+      state: "Tamil Nadu",
+      address: "Adyar, Chennai",
+      pincode: "600020",
+     
+      amount: 310,
+      payment: "Cash",
+      
+      status: "Approved",
+    },
+  ]);
 
-  // Load mock data for testing
-  useEffect(() => {
-    const mockData = [
-      { id: 1, name: "Rajesh Kumar", email: "rajesh@example.com", mobile: "9876543210", seva: "Archana", date: "2025-08-10", amount: 500, payment: "QR Code Payment", status: "Approved" },
-      { id: 2, name: "Sita Devi", email: "sita@example.com", mobile: "9123456789", seva: "Abhishekam", date: "2025-08-08", amount: 1000, payment: "Cash", status: "Pending" },
-      { id: 3, name: "Vishnu Prasad", email: "vishnu@example.com", mobile: "9988776655", seva: "Deepa Aradhana", date: "2025-08-09", amount: 300, payment: "QR Code Payment", status: "Approved" },
-      { id: 4, name: "Lakshmi Narayan", email: "lakshmi@example.com", mobile: "9090909090", seva: "Annadanam", date: "2025-08-07", amount: 1500, payment: "Cash", status: "Pending" }
-    ];
-    setBookings(mockData);
-    setFilteredBookings(mockData);
-  }, []);
-
-  const handleSearch = () => {
-    let result = bookings;
-
-    if (fromDate) {
-      result = result.filter(b => new Date(b.date) >= new Date(fromDate));
-    }
-    if (toDate) {
-      result = result.filter(b => new Date(b.date) <= new Date(toDate));
-    }
-    if (searchTerm) {
-      result = result.filter(b =>
-        b.seva.toLowerCase().includes(searchTerm.toLowerCase())
-      );
-    }
-    if (paymentFilter !== "All") {
-      result = result.filter(b => b.payment === paymentFilter);
-    }
-
-    setFilteredBookings(result);
+  const handleFilterChange = (e) => {
+    const { name, value } = e.target;
+    setFilters((prev) => ({ ...prev, [name]: value }));
   };
 
   const resetFilters = () => {
-    setFromDate("");
-    setToDate("");
-    setSearchTerm("");
-    setPaymentFilter("All");
-    setFilteredBookings(bookings);
+    setFilters({
+      seva: "",
+      date: "",
+      status: "All",
+      payment: "All",
+    });
   };
+  const filteredBookings = bookings.filter((b) => {
+    const afterFrom = !filters.fromDate || b.sevadate >= filters.fromDate;
+    const beforeTo = !filters.toDate || b.sevadate <= filters.toDate;
+  
+    return (
+      (!filters.seva || b.seva.toLowerCase().includes(filters.seva.toLowerCase())) &&
+      afterFrom &&
+      beforeTo &&
+      (filters.status === "All" || b.status === filters.status) &&
+      (filters.payment === "All" || b.payment === filters.payment)
+    );
+  });
+  
 
-  const approveAllPending = () => {
-    const updated = bookings.map(b =>
+  const totalAmount = filteredBookings.reduce((sum, b) => sum + b.amount, 0);
+
+  const approveAll = () => {
+    const updatedBookings = bookings.map((b) =>
       b.status === "Pending" ? { ...b, status: "Approved" } : b
     );
-    setBookings(updated);
-    setFilteredBookings(updated);
+    setBookings(updatedBookings);
   };
 
   const downloadCSV = () => {
-    const csvContent =
+    const headers = [
+      "ID",
+      "Name",
+      "Email",
+      "Mobile",
+      "Seva",
+      "Seva Date",
+      "Gotra",
+      "Nakshatra",
+      "Raashi",
+      "District",
+      "State",
+      "Address",
+      "Pincode",
+     
+      "Amount",
+      "Payment",
+    
+      "Status",
+    ];
+  
+    const rows = filteredBookings.map((b) => [
+      b.id,
+      b.name,
+      b.email,
+      b.mobile,
+      b.seva,
+      b.sevadate,
+      b.gotra,
+      b.nakshatra,
+      b.raashi,
+      b.district,
+      b.state,
+      b.address,
+      b.pincode,
+   
+      b.amount,
+      b.payment,
+    
+      b.status,
+    ]);
+  
+    let csvContent =
       "data:text/csv;charset=utf-8," +
-      ["ID,Name,Email,Mobile,Seva,Date,Amount,Payment,Status"]
-        .concat(
-          filteredBookings.map(
-            b =>
-              `${b.id},${b.name},${b.email},${b.mobile},${b.seva},${b.date},${b.amount},${b.payment},${b.status}`
-          )
-        )
-        .join("\n");
-
+      [headers, ...rows].map((e) => e.join(",")).join("\n");
+  
     const encodedUri = encodeURI(csvContent);
     const link = document.createElement("a");
     link.setAttribute("href", encodedUri);
-    link.setAttribute("download", "bookings.csv");
+    link.setAttribute("download", "seva_bookings.csv");
     document.body.appendChild(link);
     link.click();
+    document.body.removeChild(link);
   };
+  
 
   return (
-    <div className="bookings-container">
-      <div className="actions-header">
-        <button className="back-btn" onClick={() => window.history.back()}>
-          ← Back to Dashboard
-        </button>
-        <button className="download-btn" onClick={downloadCSV}>
+    <div className="seva-bookings">
+      <h2 className="page-heading">Temple Bookings</h2>
+
+      {/* Filters */}
+      <div className="filters">
+        <div className="form-group">
+          <label>Seva</label>
+          <input
+            type="text"
+            name="seva"
+            value={filters.seva}
+            onChange={handleFilterChange}
+            placeholder="Enter seva name"
+          />
+        </div>
+        <div className="form-group">
+  <label>From Date</label>
+  <input
+    type="date"
+    name="fromDate"
+    value={filters.fromDate}
+    onChange={handleFilterChange}
+  />
+</div>
+<div className="form-group">
+  <label>To Date</label>
+  <input
+    type="date"
+    name="toDate"
+    value={filters.toDate}
+    onChange={handleFilterChange}
+  />
+</div>
+
+        <div className="form-group">
+          <label>Status</label>
+          <select
+            name="status"
+            value={filters.status}
+            onChange={handleFilterChange}
+          >
+            <option value="All">All</option>
+            <option value="Pending">Pending</option>
+            <option value="Approved">Approved</option>
+            <option value="Rejected">Rejected</option>
+          </select>
+        </div>
+        <div className="form-group">
+          <label>Payment</label>
+          <select
+            name="payment"
+            value={filters.payment}
+            onChange={handleFilterChange}
+          >
+            <option value="All">All</option>
+            <option value="Online">Online</option>
+            <option value="Cash">Cash</option>
+          </select>
+        </div>
+        <div className="form-group filter-actions">
+         
+          <button className="btn btn-secondary" onClick={resetFilters}>
+            Reset
+          </button>
+          <button className="btn btn-primary">Search</button>
+        </div>
+      </div>
+
+      {/* Approve All, Total Amount & CSV Download */}
+      <div className="approve-total">
+      
+        <button className="btn btn-info" onClick={downloadCSV}>
           Download CSV
         </button>
+        <span className="total-amount">
+          Total Amount: ₹{totalAmount.toFixed(2)}
+        </span>
       </div>
 
-      <h2>All Temple Bookings</h2>
-
-      <div className="filters scroll-filters">
-        <input
-          type="date"
-          value={fromDate}
-          onChange={e => setFromDate(e.target.value)}
-        />
-        <input
-          type="date"
-          value={toDate}
-          onChange={e => setToDate(e.target.value)}
-        />
-        <input
-          type="text"
-          placeholder="Search seva..."
-          value={searchTerm}
-          onChange={e => setSearchTerm(e.target.value)}
-        />
-        <select
-          value={paymentFilter}
-          onChange={e => setPaymentFilter(e.target.value)}
-        >
-          <option value="All">All</option>
-          <option value="QR Code Payment">QR Code Payment</option>
-          <option value="Cash">Cash</option>
-        </select>
-        <button className="search-btn" onClick={handleSearch}>
-          Search
-        </button>
-        <button className="reset-btn" onClick={resetFilters}>
-          Reset
-        </button>
-      </div>
-
-      <button className="approve-all-btn" onClick={approveAllPending}>
-        Approve All Pending
-      </button>
-
-      <table className="bookings-table">
-        <thead>
-          <tr>
-            <th>ID</th>
-            <th>NAME</th>
-            <th>EMAIL</th>
-            <th>MOBILE</th>
-            <th>SEVA</th>
-            <th>DATE</th>
-            <th>AMOUNT</th>
-            <th>PAYMENT</th>
-            <th>STATUS</th>
-            <th>ACTION</th>
-          </tr>
-        </thead>
-        <tbody>
-          {filteredBookings.length > 0 ? (
-            filteredBookings.map(b => (
+      {/* Scrollable Table */}
+      <div className="table-container">
+        <table className="custom-table">
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>NAME</th>
+              <th>EMAIL</th>
+              <th>MOBILE</th>
+              <th>SEVA</th>
+              <th>DATE</th>
+              <th>GOTRA</th>
+              <th>NAKSHATRA</th>
+              <th>RAASHI</th>
+              <th>DISTRICT</th>
+              <th>STATE</th>
+              <th>ADDRESS</th>
+              <th>PINCODE</th>
+             
+              <th>AMOUNT</th>
+              <th>PAYMENT</th>
+             
+              <th>STATUS</th>
+              <th>ACTION</th>
+            </tr>
+          </thead>
+          <tbody>
+            {filteredBookings.map((b) => (
               <tr key={b.id}>
                 <td>{b.id}</td>
                 <td>{b.name}</td>
-                <td>{b.email}</td>
+                <td className="email-cell">{b.email}</td>
                 <td>{b.mobile}</td>
                 <td>{b.seva}</td>
-                <td>{b.date}</td>
-                <td>{b.amount}</td>
+                <td>{b.sevadate}</td>
+                <td>{b.gotra}</td>
+                <td>{b.nakshatra}</td>
+                <td>{b.raashi}</td>
+                <td>{b.district}</td>
+                <td>{b.state}</td>
+                <td>{b.address}</td>
+                <td>{b.pincode}</td>
+               
+                <td>₹{b.amount.toFixed(2)}</td>
                 <td>{b.payment}</td>
+               
                 <td
-                  style={{
-                    color: b.status === "Approved" ? "green" : "red",
-                    fontWeight: "bold"
-                  }}
+                  className={
+                    b.status === "Approved"
+                      ? "status-approved"
+                      : b.status === "Rejected"
+                      ? "status-rejected"
+                      : "status-pending"
+                  }
                 >
                   {b.status}
                 </td>
                 <td>
-                  <button className="edit-btn">Edit</button>
+                  <button className="btn btn-primary btn-sm">Edit</button>
                 </td>
               </tr>
-            ))
-          ) : (
-            <tr>
-              <td colSpan="10" style={{ textAlign: "center", padding: "20px" }}>
-                No records found.
-              </td>
-            </tr>
-          )}
-        </tbody>
-      </table>
+            ))}
+          </tbody>
+        </table>
+      </div>
     </div>
   );
-};
-
-export default TempleBookings;
+}
