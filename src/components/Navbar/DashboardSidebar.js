@@ -74,6 +74,15 @@ const DashboardSidebar = ({ isOpen, toggleSidebar }) => {
         <NavLink to="/change-password" className="sidebar-link" onClick={toggleSidebar}>
           <FaKey className="sidebar-icon" /> Change Password
         </NavLink>
+        <a
+          href="https://temple-accountant.vercel.app"
+          className="sidebar-link"
+          target="_blank"
+          rel="noopener noreferrer"
+          onClick={toggleSidebar}
+        >
+          <FaTachometerAlt className="sidebar-icon" /> Accountant
+        </a>
 
         {/* ✅ Fixed logout NavLink */}
         <NavLink

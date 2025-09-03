@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { FaUser, FaLock, FaEnvelope } from "react-icons/fa";
+import axios from "axios";
 import "./Auth.css";
 
 export default function Signup() {
@@ -8,12 +9,13 @@ export default function Signup() {
   const [name, setName] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
+  const [role, setRole] = useState("admin"); // start empty for placeholder
   const navigate = useNavigate();
 
-  const handleSignup = (e) => {
+  const handleSignup = async (e) => {
     e.preventDefault();
 
-    if (!email || !name || !password || !confirmPassword) {
+    if (!email || !name || !password || !confirmPassword || !role) {
       alert("Please fill in all fields.");
       return;
     }
@@ -23,12 +25,37 @@ export default function Signup() {
       return;
     }
 
-    // Save the new account (dummy localStorage example)
-    localStorage.setItem("userEmail", email);
-    localStorage.setItem("userPassword", password);
+    try {
+      // API call
+      const res = await axios.post(
+        "https://testtapi1.ap-1.evennode.com/api/admin/adminRegistration",
+        {
+          name,
+          email,
+          password,
+          role,
+        }
+      );
 
-    alert("Account created successfully! Please login.");
-    navigate("/login"); // redirect to Login page
+      if (res.data.Status) {
+        alert(res.data.message);
+
+        // Save token / user details to localStorage
+        localStorage.setItem("userToken", res.data.data.tokens[0].token);
+        localStorage.setItem("userRole", res.data.data.role);
+        localStorage.setItem("userEmail", res.data.data.email);
+
+        navigate("/login");
+      } else {
+        alert("Signup failed. Please try again.");
+      }
+    } catch (error) {
+      console.error("Signup error:", error);
+      alert(
+        error.response?.data?.message ||
+          "Something went wrong. Please try again later."
+      );
+    }
   };
 
   return (
@@ -36,6 +63,7 @@ export default function Signup() {
       <form className="auth-form" onSubmit={handleSignup}>
         <h2>Sign Up</h2>
 
+        {/* Name */}
         <div className="input-group">
           <FaUser className="input-icon" />
           <input
@@ -47,6 +75,7 @@ export default function Signup() {
           />
         </div>
 
+        {/* Email */}
         <div className="input-group">
           <FaEnvelope className="input-icon" />
           <input
@@ -58,6 +87,7 @@ export default function Signup() {
           />
         </div>
 
+        {/* Password */}
         <div className="input-group">
           <FaLock className="input-icon" />
           <input
@@ -69,6 +99,7 @@ export default function Signup() {
           />
         </div>
 
+        {/* Confirm Password */}
         <div className="input-group">
           <FaLock className="input-icon" />
           <input
@@ -80,7 +111,13 @@ export default function Signup() {
           />
         </div>
 
+      
+
+
+        {/* Submit */}
         <button type="submit" className="auth-btn">Sign Up</button>
+
+        {/* Redirect to login */}
         <p className="auth-link">
           Already have an account? <Link to="/login">Login</Link>
         </p>

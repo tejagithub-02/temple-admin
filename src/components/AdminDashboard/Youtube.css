@@ -1,0 +1,212 @@
+/* Container */
+.video-admin-container {
+    margin-top: 100px;
+    margin-left: 250px;
+    padding: 30px;
+    min-height: calc(100vh - 100px);
+    background: linear-gradient(135deg, #f9fafb, #f1f5f9);
+    font-family: "Inter", sans-serif;
+    transition: margin-left 0.3s ease;
+  }
+  
+  /* Header */
+  .video-admin-header {
+    margin-bottom: 30px;
+    text-align: center;
+  }
+  
+  .video-admin-header h2 {
+    font-size: 28px;
+    font-weight: 700;
+    color: #1e3a8a;
+    margin-bottom: 6px;
+  }
+  
+  
+  
+  /* Layout */
+  .video-admin-content {
+    display: grid;
+    grid-template-columns: 1fr 2fr;
+    gap: 30px;
+  }
+  
+  /* Cards */
+  .video-upload-card,
+  .video-list-card {
+    background: #ffffff;
+    border-radius: 14px;
+    padding: 25px;
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.06);
+    transition: all 0.3s ease;
+  }
+  
+  .video-upload-card:hover,
+  .video-list-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.08);
+  }
+  
+  .video-upload-card h3,
+  .video-list-card h3 {
+    font-size: 20px;
+    color: #1e3a8a;
+    margin-bottom: 20px;
+    border-bottom: 2px solid #e2e8f0;
+    padding-bottom: 10px;
+  }
+  
+  /* Form */
+  .video-upload-form {
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+  }
+  
+  .video-form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+  
+  .video-form-group label {
+    font-weight: 600;
+    color: #334155;
+  }
+  
+  .video-form-group input[type="file"] {
+    padding: 20px;
+    border: 1px solid #cbd5e1;
+    border-radius: 8px;
+    cursor: pointer;
+  }
+  
+  /* Buttons */
+  .video-upload-button,
+  .video-delete-button {
+    border: none;
+    padding: 10px 16px;
+    border-radius: 8px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+  }
+  
+  .video-upload-button {
+    background-color: #2563eb;
+    color: white;
+  }
+  
+  .video-upload-button:hover {
+    background-color: #1e40af;
+  }
+  
+  .video-delete-button {
+    background-color: #fee2e2;
+    color: #b91c1c;
+    margin-top: 12px;
+  }
+  
+  .video-delete-button:hover {
+    background-color: #fecaca;
+  }
+  
+  /* Video Preview */
+  .video-preview {
+    width: 100%;
+    border-radius: 6px;
+    margin-top: 10px;
+  }
+  
+  /* Video Item */
+  .video-item {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+  
+  .video-item-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  
+  .video-status {
+    font-size: 13px;
+    color: #64748b;
+  }
+  
+  .video-title {
+    font-weight: 600;
+    color: #1e3a8a;
+    max-width: 180px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  
+  /* Empty State */
+  .video-empty {
+    text-align: center;
+    padding: 40px;
+    border: 2px dashed #cbd5e1;
+    border-radius: 10px;
+    background: #f9fafb;
+    color: #64748b;
+  }
+  
+  /* Responsive */
+  @media (max-width: 1200px) {
+    .video-admin-content {
+      grid-template-columns: 1fr;
+    }
+  }
+  
+  @media (max-width: 1024px) {
+    .video-admin-container {
+      margin-left: 0;
+    }
+  }
+  
+  @media (max-width: 768px) {
+    .video-admin-container {
+      padding: 20px;
+    }
+  }
+  .btn {
+    padding: 8px 16px;
+    margin: 4px;
+    border: none;
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.3s ease;
+  }
+  
+
+  
+  /* Edit button */
+  .edit-btn {
+    background: linear-gradient(135deg, #4cafef, #007bff);
+    color: white;
+    box-shadow: 0 10px 6px rgba(0, 123, 255, 0.3);
+  }
+  
+  .edit-btn:hover {
+    background: linear-gradient(135deg, #007bff, #0056b3);
+    transform: translateY(-2px);
+  }
+  
+  /* Delete button */
+  .delete-btn {
+    background: linear-gradient(135deg, #ff5f6d, #d62828);
+    color: white;
+    box-shadow: 0 3px 6px rgba(214, 40, 40, 0.3);
+  }
+  
+  .delete-btn:hover {
+    background: linear-gradient(135deg, #d62828, #a4161a);
+    transform: translateY(-2px);
+  }
+  

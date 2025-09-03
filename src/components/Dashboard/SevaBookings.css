@@ -260,6 +260,12 @@
     text-align: center;
   }
 }
+@media (min-width: 1200px) {
+  .filters
+  {
+    margin-top: 100px;
+  }
+}
 
 /* CSV Download Button */
 .btn-info {

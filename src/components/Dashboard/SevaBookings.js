@@ -1,4 +1,5 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import axios from "axios";
 import "./SevaBookings.css";
 
 export default function SevaBookings() {
@@ -7,52 +8,83 @@ export default function SevaBookings() {
     fromDate: "",
     toDate: "",
     status: "All",
-    payment: "All",
+  
   });
 
-  const [bookings, setBookings] = useState([
-    {
-      id: 1,
-      name: "Teja",
-      email: "teja@example.com",
-      mobile: "9876543210",
-      seva: "Abhishekam",
-      sevadate: "2025-08-20",
-      gotra: "Kashyapa",
-      nakshatra: "Rohini",
-      raashi: "Vrishabha",
-      district: "Hyderabad",
-      state: "Telangana",
-      address: "Ameerpet, Hyderabad",
-      pincode: "500016",
-      bookeddate: "2025-08-18",
-      amount: 500,
-      payment: "Online",
-      screenshot: "dummy.png",
-      status: "Pending",
-    },
-    {
-      id: 2,
-      name: "Priya",
-      email: "priya@example.com",
-      mobile: "9876501234",
-      seva: "Archana",
-      sevadate: "2025-08-21",
-      gotra: "Vasishta",
-      nakshatra: "Ashwini",
-      raashi: "Mesha",
-      district: "Chennai",
-      state: "Tamil Nadu",
-      address: "Adyar, Chennai",
-      pincode: "600020",
-      bookeddate: "2025-08-17",
-      amount: 300,
-      payment: "Cash",
-      screenshot: "dummy.png",
-      status: "Approved",
-    },
-  ]);
+  const [bookings, setBookings] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [viewImage, setViewImage] = useState(null);
+  const [updatingId, setUpdatingId] = useState(null);
 
+  const API_BASE = process.env.REACT_APP_BACKEND_API;
+  const token = localStorage.getItem("userToken");
+
+  const axiosAuth = axios.create({
+    baseURL: `${API_BASE}api/savabooking`,
+    headers: {
+      Authorization: token ? `Bearer ${token}` : "",
+      "Content-Type": "application/json",
+    },
+  });
+
+  // Fetch bookings
+  useEffect(() => {
+    fetchBookings();
+  }, []);
+
+  const fetchBookings = async () => {
+    try {
+      setLoading(true);
+      const res = await axiosAuth.get("/getAll");
+      if (res.data.success) {
+        const mapped = res.data.data.map((b) => ({
+          id: b._id,
+          name: b.karta_name,
+          mobile: b.phone,
+          seva: b.sava_id?.name || "",
+          sevadate: b.sava_id?.date?.split("T")[0] || b.from_booking_date?.split("T")[0],
+          gotra: b.gotra,
+          nakshatra: b.nakshatra,
+          raashi: b.raashi,
+          district: b.district,
+          state: b.state,
+          address: b.address,
+          pincode: b.pincode,
+          bookeddate: b.createdAt?.split("T")[0],
+          amount: b.sava_id?.price || 0,
+          payment: b.payment_screenshot ? "Online" : "Cash",
+          screenshot: b.payment_screenshot,
+          status: b.status.charAt(0).toUpperCase() + b.status.slice(1),
+        }));
+        setBookings(mapped);
+      }
+    } catch (err) {
+      console.error("Error fetching bookings:", err.response?.data || err.message);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  // Update booking status
+  const updateStatus = async (id, newStatus) => {
+    try {
+      setUpdatingId(id);
+      const res = await axiosAuth.patch(`/updateBookingStatus/${id}`, {
+        status: newStatus.toLowerCase(),
+      });
+      if (res.data.success) {
+        setBookings((prev) =>
+          prev.map((b) => (b.id === id ? { ...b, status: newStatus } : b))
+        );
+      }
+    } catch (err) {
+      console.error("Error updating status:", err.response?.data || err.message);
+    } finally {
+      setUpdatingId(null);
+    }
+  };
+
+  // Filters
   const handleFilterChange = (e) => {
     const { name, value } = e.target;
     setFilters((prev) => ({ ...prev, [name]: value }));
@@ -64,87 +96,37 @@ export default function SevaBookings() {
       fromDate: "",
       toDate: "",
       status: "All",
-      payment: "All",
+      
     });
   };
 
   const filteredBookings = bookings.filter((b) => {
     const afterFrom = !filters.fromDate || b.sevadate >= filters.fromDate;
     const beforeTo = !filters.toDate || b.sevadate <= filters.toDate;
-
     return (
       (!filters.seva || b.seva.toLowerCase().includes(filters.seva.toLowerCase())) &&
       afterFrom &&
       beforeTo &&
-      (filters.status === "All" || b.status === filters.status) &&
-      (filters.payment === "All" || b.payment === filters.payment)
+      (filters.status === "All" || b.status === filters.status) 
+     
     );
   });
 
   const totalAmount = filteredBookings.reduce((sum, b) => sum + b.amount, 0);
 
-  const approveAll = () => {
-    const updatedBookings = bookings.map((b) =>
-      b.status === "Pending" ? { ...b, status: "Approved" } : b
-    );
-    setBookings(updatedBookings);
+  const approveAll = async () => {
+    const toApprove = filteredBookings.filter((b) => b.status !== "Approved");
+    if (toApprove.length === 0) {
+      alert("All visible bookings are already approved!");
+      return;
+    }
+    for (const b of toApprove) {
+      await updateStatus(b.id, "Approved");
+    }
+    alert("All visible bookings approved successfully!");
   };
 
-  const downloadCSV = () => {
-    const headers = [
-      "ID",
-      "Name",
-      "Email",
-      "Mobile",
-      "Seva",
-      "Seva Date",
-      "Gotra",
-      "Nakshatra",
-      "Raashi",
-      "District",
-      "State",
-      "Address",
-      "Pincode",
-      "Booked Date",
-      "Amount",
-      "Payment",
-      "Screenshot",
-      "Status",
-    ];
-
-    const rows = filteredBookings.map((b) => [
-      b.id,
-      b.name,
-      b.email,
-      b.mobile,
-      b.seva,
-      b.sevadate,
-      b.gotra,
-      b.nakshatra,
-      b.raashi,
-      b.district,
-      b.state,
-      b.address,
-      b.pincode,
-      b.bookeddate,
-      b.amount,
-      b.payment,
-      `${window.location.origin}/uploads/${b.screenshot}`,
-      b.status,
-    ]);
-
-    let csvContent =
-      "data:text/csv;charset=utf-8," +
-      [headers, ...rows].map((e) => e.join(",")).join("\n");
-
-    const encodedUri = encodeURI(csvContent);
-    const link = document.createElement("a");
-    link.setAttribute("href", encodedUri);
-    link.setAttribute("download", "seva_bookings.csv");
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
-  };
+  if (loading) return <div>Loading bookings...</div>;
 
   return (
     <div className="seva-bookings">
@@ -164,76 +146,55 @@ export default function SevaBookings() {
         </div>
         <div className="form-group">
           <label>From Date</label>
-          <input
-            type="date"
-            name="fromDate"
-            value={filters.fromDate}
-            onChange={handleFilterChange}
-          />
+          <input type="date" name="fromDate" value={filters.fromDate} onChange={handleFilterChange} />
         </div>
         <div className="form-group">
           <label>To Date</label>
-          <input
-            type="date"
-            name="toDate"
-            value={filters.toDate}
-            onChange={handleFilterChange}
-          />
+          <input type="date" name="toDate" value={filters.toDate} onChange={handleFilterChange} />
         </div>
         <div className="form-group">
           <label>Status</label>
-          <select
-            name="status"
-            value={filters.status}
-            onChange={handleFilterChange}
-          >
+          <select name="status" value={filters.status} onChange={handleFilterChange}>
             <option value="All">All</option>
             <option value="Pending">Pending</option>
             <option value="Approved">Approved</option>
             <option value="Rejected">Rejected</option>
           </select>
         </div>
-        <div className="form-group">
-          <label>Payment</label>
-          <select
-            name="payment"
-            value={filters.payment}
-            onChange={handleFilterChange}
-          >
-            <option value="All">All</option>
-            <option value="Online">Online</option>
-            <option value="Cash">Cash</option>
-          </select>
-        </div>
+      
         <div className="form-group filter-actions">
-          <button className="btn btn-primary">Search</button>
           <button className="btn btn-secondary" onClick={resetFilters}>
             Reset
           </button>
         </div>
       </div>
 
-      {/* Approve All, Total Amount & CSV Download */}
+      {/* Approve All & Total Amount */}
       <div className="approve-total">
-        <button className="btn btn-success" onClick={approveAll}>
+        <button className="btn btn-success" onClick={approveAll} disabled={updatingId !== null}>
           Approve All Pending
         </button>
-        <button className="btn btn-info" onClick={downloadCSV}>
-          Download CSV
-        </button>
-        <span className="total-amount">
-          Total Amount: ₹{totalAmount.toFixed(2)}
-        </span>
+        <span className="total-amount">Total Amount: ₹{totalAmount.toFixed(2)}</span>
       </div>
 
-      {/* Scrollable Table */}
+      {/* Image Modal */}
+      {viewImage && (
+        <div className="image-modal" onClick={() => setViewImage(null)}>
+          <div className="image-modal-content" onClick={(e) => e.stopPropagation()}>
+            <button className="image-modal-close" onClick={() => setViewImage(null)}>✕</button>
+            <img src={viewImage} alt="Full view" />
+          </div>
+        </div>
+      )}
+
+      {/* Table */}
       <div className="table-container">
         <table className="custom-table">
           <thead>
             <tr>
+              <th>SI NO</th>
               <th>ID</th>
-              <th>NAME</th>
-              <th>EMAIL</th>
+              <th>KARTA NAME</th>
               <th>MOBILE</th>
               <th>SEVA</th>
               <th>SEVA-DATE</th>
@@ -253,11 +214,11 @@ export default function SevaBookings() {
             </tr>
           </thead>
           <tbody>
-            {filteredBookings.map((b) => (
+            {filteredBookings.map((b, index) => (
               <tr key={b.id}>
+                <td>{index + 1}</td>
                 <td>{b.id}</td>
                 <td>{b.name}</td>
-                <td className="email-cell">{b.email}</td>
                 <td>{b.mobile}</td>
                 <td>{b.seva}</td>
                 <td>{b.sevadate}</td>
@@ -272,11 +233,16 @@ export default function SevaBookings() {
                 <td>₹{b.amount.toFixed(2)}</td>
                 <td>{b.payment}</td>
                 <td>
-                  <img
-                    src={`uploads/${b.screenshot}`}
-                    alt="screenshot"
-                    width="60"
-                  />
+                  {b.screenshot && (
+                    <img
+                      src={b.screenshot}
+                      alt="screenshot"
+                      width="60"
+                      height="60"
+                      style={{ cursor: "pointer" }}
+                      onClick={() => setViewImage(b.screenshot)}
+                    />
+                  )}
                 </td>
                 <td
                   className={
@@ -290,7 +256,20 @@ export default function SevaBookings() {
                   {b.status}
                 </td>
                 <td>
-                  <button className="btn btn-primary btn-sm">Edit</button>
+                  <button
+                    className="btn btn-success btn-sm"
+                    onClick={() => updateStatus(b.id, "Approved")}
+                    disabled={updatingId === b.id}
+                  >
+                    {updatingId === b.id && b.status !== "Approved" ? "Approving..." : "Approve"}
+                  </button>
+                  <button
+                    className="btn btn-danger btn-sm"
+                    onClick={() => updateStatus(b.id, "Rejected")}
+                    disabled={updatingId === b.id}
+                  >
+                    {updatingId === b.id && b.status !== "Rejected" ? "Rejecting..." : "Reject"}
+                  </button>
                 </td>
               </tr>
             ))}

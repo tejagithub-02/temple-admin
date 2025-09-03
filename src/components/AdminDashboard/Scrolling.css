@@ -1,0 +1,220 @@
+/* Scrolling Admin Container */
+.scrolling-admin-container {
+  margin-top: 100px;
+  margin-left: 250px;
+  padding: 30px;
+  min-height: calc(100vh - 100px);
+  background-color: #f8fafc;
+  transition: margin-left 0.3s ease;
+}
+
+/* Header Section */
+.scrolling-admin-header {
+  margin-bottom: 30px;
+}
+
+.scrolling-admin-header h2 {
+  font-size: 28px;
+  color: #1e3a8a;
+  margin-bottom: 8px;
+}
+
+/* Layout */
+.scrolling-admin-content {
+  display: grid;
+  grid-template-columns: 1fr 2fr;
+  gap: 30px;
+}
+
+/* Cards */
+.scrolling-upload-card,
+.scrolling-list-card {
+  background: white;
+  border-radius: 12px;
+  padding: 25px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+}
+
+.scrolling-upload-card h3,
+.scrolling-list-card h3 {
+  font-size: 20px;
+  color: #1e3a8a;
+  margin-bottom: 20px;
+  padding-bottom: 15px;
+  border-bottom: 1px solid #e2e8f0;
+}
+
+/* Form */
+.scrolling-upload-form {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.scrolling-form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.scrolling-form-group label {
+  font-weight: 500;
+  color: #334155;
+}
+
+.scrolling-form-group input[type="text"] {
+  padding: 10px 15px;
+  border: 1px solid #cbd5e1;
+  border-radius: 6px;
+  font-size: 15px;
+  transition: all 0.2s ease;
+}
+
+.scrolling-form-group input[type="text"]:focus {
+  outline: none;
+  border-color: #1e40af;
+  box-shadow: 0 0 0 3px rgba(30, 64, 175, 0.1);
+}
+
+/* Upload Button */
+.scrolling-upload-button {
+  background-color: #1e3a8a;
+  color: white;
+  border: none;
+  padding: 12px 20px;
+  border-radius: 6px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  margin-top: 10px;
+}
+
+.scrolling-upload-button:hover {
+  background-color: #1e40af;
+}
+
+/* Item */
+.scrolling-item {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 12px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  background: #fff;
+}
+
+.scrolling-item-header {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 8px;
+}
+
+.scrolling-item-number {
+  font-size: 14px;
+  font-weight: 600;
+  color: #007bff;
+}
+
+.scrolling-item-title {
+  margin-top: 10px;
+  width: 100%;
+  font-size: 16px;
+  font-weight: 500;
+  color: #1e3a8a;
+  line-height: 1.5;
+  white-space: normal !important;
+  word-break: break-word;
+  overflow-wrap: anywhere;
+}
+
+/* Delete Button */
+.scrolling-delete-button {
+  align-self: flex-end;
+  padding: 6px 12px;
+  background: #dc3545;
+  color: #fff;
+  font-size: 14px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.scrolling-delete-button:hover {
+  background: #b52a37;
+}
+
+/* Empty State */
+.scrolling-empty {
+  text-align: center;
+  padding: 30px;
+  color: #64748b;
+  border: 1px dashed #cbd5e1;
+  border-radius: 8px;
+}
+
+/* Disabled states */
+input:disabled,
+button:disabled {
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
+/* Desktop-specific text behavior */
+@media (min-width: 1024px) {
+  .scrolling-item-title {
+    user-select: text;
+    cursor: text;
+  }
+}
+
+/* Responsive */
+@media (max-width: 1200px) {
+  .scrolling-admin-content {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 1024px) {
+  .scrolling-admin-container {
+    margin-left: 0;
+  }
+}
+
+@media (max-width: 768px) {
+  .scrolling-admin-container {
+    padding: 20px;
+  }
+
+  .scrolling-item-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 5px;
+  }
+
+  .scrolling-item-title {
+    max-width: 100%;
+  }
+}
+/* Notification */
+.scrolling-notification {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  background-color: #1e3a8a;
+  color: #fff;
+  padding: 14px 20px;
+  border-radius: 10px;
+  box-shadow: 0 6px 18px rgba(0,0,0,0.15);
+  z-index: 9999;
+  animation: slideIn 0.3s ease forwards;
+}
+
+.scrolling-notification.error { background-color: #b91c1c; }
+
+@keyframes slideIn {
+  from { opacity: 0; transform: translateX(100%); }
+  to { opacity: 1; transform: translateX(0); }
+}

@@ -1,290 +1,294 @@
 .events-container {
-    margin-top: 100px;
-    margin-left: 250px;
-    padding: 30px;
-    min-height: calc(100vh - 100px);
-    background-color: #f8fafc;
-    border-radius: 10px;
-    box-shadow: 0 4px 12px rgb(0 0 0 / 0.05);
-    transition: margin-left 0.3s ease;
-    max-width: 100%;
-    box-sizing: border-box;
+  margin-top: 100px;
+  margin-left: 250px;
+  padding: 30px;
+  min-height: calc(100vh - 100px);
+  background-color: #f8fafc;
+  border-radius: 10px;
+  box-shadow: 0 4px 12px rgb(0 0 0 / 0.05);
+  transition: margin-left 0.3s ease;
+  max-width: 100%;
+  box-sizing: border-box;
+}
+
+h2 {
+  font-size: 26px;
+  color: #1e3a8a;
+  margin-bottom: 25px;
+}
+
+.events-form {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.form-group label {
+  font-weight: 600;
+  color: #334155;
+  margin-bottom: 6px;
+  display: block;
+}
+
+.form-group input[type="text"],
+.form-group input[type="date"],
+.form-group input[type="number"],
+.form-group input[type="file"],
+.form-group textarea {
+  width: 100%;
+  padding: 8px 12px;
+  font-size: 15px;
+  border: 1px solid #cbd5e1;
+  border-radius: 6px;
+  transition: border-color 0.3s ease;
+  box-sizing: border-box;
+}
+
+.form-group input:focus,
+.form-group textarea:focus {
+  outline: none;
+  border-color: #1e40af;
+  box-shadow: 0 0 0 3px rgba(30, 64, 175, 0.15);
+}
+
+.form-group textarea {
+  resize: vertical;
+  min-height: 80px;
+}
+
+.file-name {
+  margin-top: 6px;
+  font-size: 14px;
+  color: #475569;
+  font-style: italic;
+}
+
+.detail-images-group {
+  display: flex;
+  gap: 20px;
+}
+
+.detail-images-group > div {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.event-dates-section label {
+  font-weight: 600;
+  color: #334155;
+  margin-bottom: 8px;
+  display: block;
+}
+
+.event-date-row {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 12px;
+}
+
+.event-date-row input[type="date"],
+.event-date-row input[type="text"],
+.event-date-row input[type="number"] {
+  padding: 8px;
+  flex: 1;
+  min-width: 0;
+}
+
+.remove-date-btn {
+  background: #fee2e2;
+  border: none;
+  color: #b91c1c;
+  cursor: pointer;
+  padding: 4px 8px;
+  border-radius: 6px;
+  font-size: 18px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background-color 0.2s ease;
+}
+
+.remove-date-btn:hover {
+  background: #fecaca;
+}
+
+.add-date-btn {
+  background-color: #1e3a8a;
+  color: white;
+  border: none;
+  padding: 8px 18px;
+  font-weight: 600;
+  border-radius: 8px;
+  cursor: pointer;
+  width: fit-content;
+  margin-top: 8px;
+  transition: background-color 0.2s ease;
+}
+
+.add-date-btn:hover {
+  background-color: #1e40af;
+}
+
+.form-actions {
+  display: flex;
+  gap: 15px;
+  margin-top: 25px;
+}
+
+.save-btn {
+  background-color: #1e3a8a;
+  color: white;
+  border: none;
+  padding: 12px 30px;
+  border-radius: 8px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.save-btn:hover {
+  background-color: #1e40af;
+}
+
+.cancel-btn {
+  background-color: #ef4444;
+  color: white;
+  border: none;
+  padding: 12px 30px;
+  border-radius: 8px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.cancel-btn:hover {
+  background-color: #dc2626;
+}
+
+.events-table-container {
+  margin-top: 40px;
+  overflow-x: auto;
+}
+
+.events-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 14px;
+  min-width: 750px;
+}
+
+.events-table th,
+.events-table td {
+  border: 1px solid #cbd5e1;
+  padding: 8px 12px;
+  vertical-align: middle;
+  text-align: left;
+}
+
+.events-table th {
+  background: linear-gradient(90deg, #3b82f6, #60a5fa);
+  color: white;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.table-image {
+  max-width: 60px;
+  max-height: 60px;
+  object-fit: cover;
+  border-radius: 6px;
+  margin: 2px 4px 2px 0;
+}
+
+.action-btn {
+  border: none;
+  outline: none;
+  padding: 6px 12px;
+  margin: 0 2px;
+  font-size: 18px;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background-color 0.18s;
+}
+
+.edit-btn {
+  background: #a7f3d0;
+  color: #134e4a;
+}
+
+.edit-btn:hover {
+  background: #34d399;
+}
+
+.delete-btn {
+  background: #fee2e2;
+  color: #b91c1c;
+}
+
+.delete-btn:hover {
+  background: #fecaca;
+}
+
+/* Notification */
+.notification {
+  padding: 12px 20px;
+  border-radius: 8px;
+  margin-bottom: 20px;
+  font-weight: 600;
+  text-align: center;
+}
+
+.notification.success {
+  background-color: #d1fae5;
+  color: #065f46;
+}
+
+.notification.error {
+  background-color: #fee2e2;
+  color: #b91c1c;
+}
+
+.notification.warning {
+  background-color: #fef3c7;
+  color: #92400e;
+}
+
+/* Responsive */
+@media (max-width: 1024px) {
+  .events-container {
+    margin-left: 0;
   }
-  
-  
-  h2 {
-    font-size: 26px;
-    color: #1e3a8a;
-    margin-bottom: 25px;
+}
+@media (max-width: 768px) {
+  .events-container {
+    padding: 20px;
   }
-  
-  .events-form {
-    display: flex;
-    flex-direction: column;
-    gap: 20px;
-  }
-  
-  .form-group label {
-    font-weight: 600;
-    color: #334155;
-    margin-bottom: 6px;
-    display: block;
-  }
-  
-  .form-group input[type="text"],
-  .form-group input[type="date"],
-  .form-group input[type="number"],
-  .form-group input[type="file"],
-  .form-group textarea {
-    width: 100%;
-    padding: 8px 12px;
-    font-size: 15px;
-    border: 1px solid #cbd5e1;
-    border-radius: 6px;
-    transition: border-color 0.3s ease;
-    box-sizing: border-box;
-  }
-  
-  .form-group input[type="text"]:focus,
-  .form-group input[type="date"]:focus,
-  .form-group input[type="number"]:focus,
-  .form-group input[type="file"]:focus,
-  .form-group textarea:focus {
-    outline: none;
-    border-color: #1e40af;
-    box-shadow: 0 0 0 3px rgba(30, 64, 175, 0.15);
-  }
-  
-  .form-group textarea {
-    resize: vertical;
-    min-height: 80px;
-  }
-  
-  .file-name {
-    margin-top: 6px;
-    font-size: 14px;
-    color: #475569;
-    font-style: italic;
-  }
-  
-  .detail-images-group {
-    display: flex;
-    gap: 20px;
-  }
-  
-  .detail-images-group > div {
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-  }
-  
-  .event-dates-section label {
-    font-weight: 600;
-    color: #334155;
-    margin-bottom: 8px;
-    display: block;
-  }
-  
-  .event-date-row {
-    display: flex;
-    gap: 10px;
-    margin-bottom: 12px;
-  }
-  
-  .event-date-row input[type="date"],
-  .event-date-row input[type="text"],
-  .event-date-row input[type="number"] {
-    flex: 1;
-    min-width: 0;
-  }
-  
-  .remove-date-btn {
-    background: #fee2e2;
-    border: none;
-    color: #b91c1c;
-    cursor: pointer;
-    padding: 4px 8px;
-    border-radius: 6px;
-    font-size: 18px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    transition: background-color 0.2s ease;
-  }
-  
-  .remove-date-btn:hover {
-    background: #fecaca;
-  }
-  
-  .add-date-btn {
-    background-color: #1e3a8a;
-    color: white;
-    border: none;
-    padding: 8px 18px;
-    font-weight: 600;
-    border-radius: 8px;
-    cursor: pointer;
-    width: fit-content;
-    margin-top: 8px;
-    transition: background-color 0.2s ease;
-  }
-  
-  .add-date-btn:hover {
-    background-color: #1e40af;
-  }
-  
-  .form-actions {
-    display: flex;
-    gap: 15px;
-    margin-top: 25px;
-  }
-  
-  .save-btn {
-    background-color: #1e3a8a;
-    color: white;
-    border: none;
-    padding: 12px 30px;
-    border-radius: 8px;
-    font-weight: 700;
-    cursor: pointer;
-    transition: background-color 0.2s ease;
-  }
-  
-  .save-btn:hover {
-    background-color: #1e40af;
-  }
-  
-  .cancel-btn {
-    background-color: #ef4444;
-    color: white;
-    border: none;
-    padding: 12px 30px;
-    border-radius: 8px;
-    font-weight: 700;
-    cursor: pointer;
-    transition: background-color 0.2s ease;
-  }
-  
-  .cancel-btn:hover {
-    background-color: #dc2626;
-  }
-  
-  /* Responsive */
-  @media (max-width: 1024px) {
-    .events-container {
-      margin-left: 0;
-    }
-  }
-  @media (max-width: 768px) {
-    .events-container {
-      padding: 20px;
-    }
-  }
-  @media (max-width: 600px) {
+}
+@media (max-width: 600px) {
   .events-container {
     padding: 15px;
   }
-
-  /* Make form elements take full width */
   .events-form {
     flex-direction: column;
   }
-
   .detail-images-group {
     flex-direction: column;
     gap: 15px;
   }
-
-  /* Event dates: stacked + reduced horizontal padding */
   .event-date-row {
     flex-direction: column;
-    gap: 8px; /* was 12px before, reduced for compactness */
-    padding-left: 0;
-    padding-right: 0;
+    gap: 8px;
   }
-
-  .event-date-row input[type="date"],
-  .event-date-row input[type="text"],
-  .event-date-row input[type="number"] {
-    padding-left: 6px; /* tighter inside padding */
+  .event-date-row input {
+    padding-left: 6px;
     padding-right: 6px;
   }
-
   .remove-date-btn {
     align-self: flex-start;
   }
-
-  /* Table responsiveness */
-  .events-table-container {
-    overflow-x: auto; /* already exists but keeping for safety */
-  }
-
-  .events-table {
-    min-width: 750px; /* Keeps columns readable but enables scroll */
-  }
   .event-dates-section {
-    padding-left: 1px;  /* reduce from normal desktop padding */
-    padding-right: 1px; /* reduce from normal desktop padding */
+    padding-left: 1px;
+    padding-right: 1px;
   }
-
 }
-
-
-  .events-table-container {
-    margin-top: 40px;
-    overflow-x: auto;
-  }
-  
-  .events-table {
-    width: 100%;
-    border-collapse: collapse;
-    font-size: 14px;
-  }
-  
-  .events-table th,
-  .events-table td {
-    border: 1px solid #cbd5e1;
-    padding: 8px 12px;
-    vertical-align: middle;
-    text-align: left;
-  }
-  
-  .events-table th {
-    background: linear-gradient(90deg, #3b82f6, #60a5fa);
-    color: white;
-    font-weight: 600;
-    white-space: nowrap;
-  }
-  
-  .table-image {
-    max-width: 60px;
-    max-height: 60px;
-    object-fit: cover;
-    border-radius: 6px;
-    margin: 2px 4px 2px 0;
-  }
-  .action-btn {
-    border: none;
-    outline: none;
-    padding: 6px 12px;
-    margin: 0 2px;
-    font-size: 18px;
-    border-radius: 6px;
-    cursor: pointer;
-    transition: background-color 0.18s;
-  }
-  .edit-btn {
-    background: #a7f3d0;
-    color: #134e4a;
-  }
-  .edit-btn:hover {
-    background: #34d399;
-  }
-  .delete-btn {
-    background: #fee2e2;
-    color: #b91c1c;
-  }
-  .delete-btn:hover {
-    background: #fecaca;
-  }
-  

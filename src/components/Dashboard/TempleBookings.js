@@ -1,56 +1,66 @@
-import React, { useState } from "react";
-import "./EventBookings.css";
+import React, { useState, useEffect } from "react";
+import axios from "axios";
+import "./TempleBookings.css";
 
-export default function TempleBookings() {
+const API_BASE = process.env.REACT_APP_BACKEND_API; // must end with /
+const token = localStorage.getItem("userToken");
+
+const axiosAuth = axios.create({
+  baseURL: `${API_BASE}api/savabooking`, 
+  headers: {
+    Authorization: token ? `Bearer ${token}` : "",
+    "Content-Type": "application/json",
+  },
+});
+
+export default function SevaBookings() {
   const [filters, setFilters] = useState({
     seva: "",
-    fromDate: "",   
-    toDate: "",     
+    fromDate: "",
+    toDate: "",
     status: "All",
     payment: "All",
   });
-  const [bookings] = useState([
-    {
-      id: 1,
-      name: "Ravi",
-      email: "t@example.com",
-      mobile: "9876543210",
-      seva: "Abhishekam",
-      sevadate: "2025-08-20",
-      gotra: "Kashyapa",
-      nakshatra: "Rohini",
-      raashi: "Vrishabha",
-      district: "Hyderabad",
-      state: "Telangana",
-      address: "Ameerpet, Hyderabad",
-      pincode: "500016",
-      
-      amount: 1000,
-      payment: "Online",
-    
-      status: "Approved",
-    },
-    {
-      id: 2,
-      name: "Priya",
-      email: "priya@example.com",
-      mobile: "9876501234",
-      seva: "Archana",
-      sevadate: "2025-08-21",
-      gotra: "Vasishta",
-      nakshatra: "Ashwini",
-      raashi: "Mesha",
-      district: "Chennai",
-      state: "Tamil Nadu",
-      address: "Adyar, Chennai",
-      pincode: "600020",
-     
-      amount: 310,
-      payment: "Cash",
-      
-      status: "Approved",
-    },
-  ]);
+  const [bookings, setBookings] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  // ✅ Fetch bookings from API
+  useEffect(() => {
+    const fetchBookings = async () => {
+      try {
+        const res = await axiosAuth.get("/getAll");
+        if (res.data?.data) {
+          const mapped = res.data.data.map((b, idx) => ({
+            id: idx + 1,
+            name: b.karta_name,
+           
+            mobile: b.phone,
+            seva: b.sava_id?.name || "N/A",
+            sevadate: b.sava_id?.date
+              ? new Date(b.sava_id.date).toISOString().split("T")[0]
+              : "N/A",
+            gotra: b.gotra,
+            nakshatra: b.nakshatra,
+            raashi: b.raashi,
+            district: b.district,
+            state: b.state,
+            address: b.address,
+            pincode: b.pincode,
+            amount: b.sava_id?.price || 0,
+            payment: b.booking_type,
+            status: b.status,
+          }));
+          setBookings(mapped);
+        }
+      } catch (error) {
+        console.error("Error fetching bookings:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchBookings();
+  }, []);
 
   const handleFilterChange = (e) => {
     const { name, value } = e.target;
@@ -60,34 +70,34 @@ export default function TempleBookings() {
   const resetFilters = () => {
     setFilters({
       seva: "",
-      date: "",
+      fromDate: "",
+      toDate: "",
       status: "All",
       payment: "All",
     });
   };
+
   const filteredBookings = bookings.filter((b) => {
     const afterFrom = !filters.fromDate || b.sevadate >= filters.fromDate;
     const beforeTo = !filters.toDate || b.sevadate <= filters.toDate;
-  
+
     return (
-      (!filters.seva || b.seva.toLowerCase().includes(filters.seva.toLowerCase())) &&
+      (!filters.seva ||
+        b.seva?.toLowerCase().includes(filters.seva.toLowerCase())) &&
       afterFrom &&
       beforeTo &&
       (filters.status === "All" || b.status === filters.status) &&
       (filters.payment === "All" || b.payment === filters.payment)
     );
   });
-  
 
   const totalAmount = filteredBookings.reduce((sum, b) => sum + b.amount, 0);
-
- 
 
   const downloadCSV = () => {
     const headers = [
       "ID",
       "Name",
-      "Email",
+     
       "Mobile",
       "Seva",
       "Seva Date",
@@ -98,17 +108,15 @@ export default function TempleBookings() {
       "State",
       "Address",
       "Pincode",
-     
       "Amount",
       "Payment",
-    
       "Status",
     ];
-  
+
     const rows = filteredBookings.map((b) => [
       b.id,
       b.name,
-      b.email,
+     
       b.mobile,
       b.seva,
       b.sevadate,
@@ -119,17 +127,15 @@ export default function TempleBookings() {
       b.state,
       b.address,
       b.pincode,
-   
       b.amount,
       b.payment,
-    
       b.status,
     ]);
-  
+
     let csvContent =
       "data:text/csv;charset=utf-8," +
       [headers, ...rows].map((e) => e.join(",")).join("\n");
-  
+
     const encodedUri = encodeURI(csvContent);
     const link = document.createElement("a");
     link.setAttribute("href", encodedUri);
@@ -138,7 +144,6 @@ export default function TempleBookings() {
     link.click();
     document.body.removeChild(link);
   };
-  
 
   return (
     <div className="seva-bookings">
@@ -157,37 +162,24 @@ export default function TempleBookings() {
           />
         </div>
         <div className="form-group">
-  <label>From Date</label>
-  <input
-    type="date"
-    name="fromDate"
-    value={filters.fromDate}
-    onChange={handleFilterChange}
-  />
-</div>
-<div className="form-group">
-  <label>To Date</label>
-  <input
-    type="date"
-    name="toDate"
-    value={filters.toDate}
-    onChange={handleFilterChange}
-  />
-</div>
-
-        <div className="form-group">
-          <label>Status</label>
-          <select
-            name="status"
-            value={filters.status}
+          <label>From Date</label>
+          <input
+            type="date"
+            name="fromDate"
+            value={filters.fromDate}
             onChange={handleFilterChange}
-          >
-            <option value="All">All</option>
-            <option value="Pending">Pending</option>
-            <option value="Approved">Approved</option>
-            <option value="Rejected">Rejected</option>
-          </select>
+          />
         </div>
+        <div className="form-group">
+          <label>To Date</label>
+          <input
+            type="date"
+            name="toDate"
+            value={filters.toDate}
+            onChange={handleFilterChange}
+          />
+        </div>
+
         <div className="form-group">
           <label>Payment</label>
           <select
@@ -196,22 +188,20 @@ export default function TempleBookings() {
             onChange={handleFilterChange}
           >
             <option value="All">All</option>
-            <option value="Online">Online</option>
-            <option value="Cash">Cash</option>
+            <option value="UPI">UPI</option>
+            <option value="offline">Cash</option>
           </select>
         </div>
+
         <div className="form-group filter-actions">
-         
           <button className="btn btn-secondary" onClick={resetFilters}>
             Reset
           </button>
-          <button className="btn btn-primary">Search</button>
         </div>
       </div>
 
       {/* Approve All, Total Amount & CSV Download */}
       <div className="approve-total">
-      
         <button className="btn btn-info" onClick={downloadCSV}>
           Download CSV
         </button>
@@ -222,68 +212,54 @@ export default function TempleBookings() {
 
       {/* Scrollable Table */}
       <div className="table-container">
-        <table className="custom-table">
-          <thead>
-            <tr>
-              <th>ID</th>
-              <th>NAME</th>
-              <th>EMAIL</th>
-              <th>MOBILE</th>
-              <th>SEVA</th>
-              <th>DATE</th>
-              <th>GOTRA</th>
-              <th>NAKSHATRA</th>
-              <th>RAASHI</th>
-              <th>DISTRICT</th>
-              <th>STATE</th>
-              <th>ADDRESS</th>
-              <th>PINCODE</th>
+        {loading ? (
+          <p>Loading bookings...</p>
+        ) : (
+          <table className="custom-table">
+            <thead>
+              <tr>
+                <th>ID</th>
+                <th>NAME</th>
              
-              <th>AMOUNT</th>
-              <th>PAYMENT</th>
-             
-              <th>STATUS</th>
-              <th>ACTION</th>
-            </tr>
-          </thead>
-          <tbody>
-            {filteredBookings.map((b) => (
-              <tr key={b.id}>
-                <td>{b.id}</td>
-                <td>{b.name}</td>
-                <td className="email-cell">{b.email}</td>
-                <td>{b.mobile}</td>
-                <td>{b.seva}</td>
-                <td>{b.sevadate}</td>
-                <td>{b.gotra}</td>
-                <td>{b.nakshatra}</td>
-                <td>{b.raashi}</td>
-                <td>{b.district}</td>
-                <td>{b.state}</td>
-                <td>{b.address}</td>
-                <td>{b.pincode}</td>
-               
-                <td>₹{b.amount.toFixed(2)}</td>
-                <td>{b.payment}</td>
-               
-                <td
-                  className={
-                    b.status === "Approved"
-                      ? "status-approved"
-                      : b.status === "Rejected"
-                      ? "status-rejected"
-                      : "status-pending"
-                  }
-                >
-                  {b.status}
-                </td>
-                <td>
-                  <button className="btn btn-primary btn-sm">Edit</button>
-                </td>
+                <th>MOBILE</th>
+                <th>SEVA</th>
+                <th>DATE</th>
+                <th>GOTRA</th>
+                <th>NAKSHATRA</th>
+                <th>RAASHI</th>
+                <th>DISTRICT</th>
+                <th>STATE</th>
+                <th>ADDRESS</th>
+                <th>PINCODE</th>
+                <th>AMOUNT</th>
+                <th>PAYMENT</th>
+                <th>STATUS</th>
               </tr>
-            ))}
-          </tbody>
-        </table>
+            </thead>
+            <tbody>
+              {filteredBookings.map((b) => (
+                <tr key={b.id}>
+                  <td>{b.id}</td>
+                  <td>{b.name}</td>
+                 
+                  <td>{b.mobile}</td>
+                  <td>{b.seva}</td>
+                  <td>{b.sevadate}</td>
+                  <td>{b.gotra}</td>
+                  <td>{b.nakshatra}</td>
+                  <td>{b.raashi}</td>
+                  <td>{b.district}</td>
+                  <td>{b.state}</td>
+                  <td>{b.address}</td>
+                  <td>{b.pincode}</td>
+                  <td>₹{b.amount.toFixed(2)}</td>
+                  <td>{b.payment}</td>
+                  <td>{b.status}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        )}
       </div>
     </div>
   );

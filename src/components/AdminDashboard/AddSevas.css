@@ -1,263 +1,344 @@
 /* General Sevas Container */
 .general-sevas-container {
-    margin-top: 100px;
-    margin-left: 250px;
-    padding: 30px;
-    min-height: calc(100vh - 100px);
-    background-color: #f8fafc;
-    transition: margin-left 0.3s ease;
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-  }
-  
-  /* Header Section */
-  .general-sevas-header {
-    margin-bottom: 30px;
-  }
-  
-  .general-sevas-header h2 {
-    font-size: 28px;
-    color: #1e3a8a;
-    margin-bottom: 8px;
-  }
-  
-  .general-sevas-header p {
-    color: #64748b;
-    font-size: 16px;
-  }
-  
-  /* Form Card */
-  .general-sevas-form-card {
-    background: white;
-    border-radius: 12px;
-    padding: 25px;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
-    max-width: 700px;
-    margin-bottom: 40px;
-  }
-  
-  .general-sevas-form-card h3 {
-    font-size: 20px;
-    color: #1e3a8a;
-    margin-bottom: 20px;
-    padding-bottom: 15px;
-    border-bottom: 1px solid #e2e8f0;
-  }
-  
-  /* Form Styles */
-  .general-sevas-form {
-    display: flex;
-    flex-direction: column;
-    gap: 20px;
-  }
-  
-  /* Form Groups */
-  .form-group-seva {
-    display: flex;
-    flex-direction: column;
-    gap: 8px;
-  }
-  
-  .form-group-seva label {
-    font-weight: 500;
-    color: #334155;
-  }
-  
-  /* Inputs and Textarea */
-  .input-seva,
-  .textarea-seva {
-    padding: 10px 15px;
-    border: 1px solid #cbd5e1;
-    border-radius: 6px;
-    font-size: 15px;
-    transition: all 0.2s ease;
-    resize: vertical;
-  }
-  
-  .input-seva:focus,
-  .textarea-seva:focus {
-    outline: none;
-    border-color: #1e40af;
-    box-shadow: 0 0 0 3px rgba(30, 64, 175, 0.1);
-  }
-  
-  /* File Upload Label and Button */
-  .file-upload-label-seva {
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-    cursor: pointer;
-    color: #1e3a8a;
-    font-weight: 500;
-  }
-  
-  .file-input-seva {
-    display: none;
-  }
-  
-  .file-upload-button-seva {
-    background-color: #e2e8f0;
-    color: #1e3a8a;
-    padding: 10px 15px;
-    border-radius: 6px;
-    text-align: center;
-    font-weight: 500;
-    transition: all 0.2s ease;
-    width: fit-content;
-  }
-  
-  .file-upload-button-seva:hover {
-    background-color: #cbd5e1;
-  }
-  
-  /* Image Preview Container */
-  .image-preview-container-seva {
-    margin-top: 15px;
-    border: 1px dashed #cbd5e1;
-    border-radius: 8px;
-    padding: 10px;
-    display: flex;
-    justify-content: center;
-    background-color: #f8fafc;
-  }
-  
-  .image-preview-seva {
-    max-width: 100%;
-    max-height: 200px;
-    border-radius: 4px;
-    object-fit: contain;
-  }
-  
-  /* Submit Button */
-  .submit-button-seva {
-    background-color: #1e3a8a;
-    color: white;
-    border: none;
-    padding: 12px 20px;
-    border-radius: 6px;
-    font-weight: 600;
-    cursor: pointer;
-    transition: all 0.2s ease;
-    align-self: flex-start;
-  }
-  
-  .submit-button-seva:hover {
-    background-color: #1e40af;
-  }
-  
-  /* Saved Sevas Section */
-  .saved-sevas-list {
-    background: white;
-    border-radius: 12px;
-    padding: 25px;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
-    max-width: 900px;
-  }
-  
-  .saved-sevas-list h3 {
-    color: #1e3a8a;
-    margin-bottom: 20px;
-  }
-  
-  /* Empty message */
-  .empty-message {
-    color: #64748b;
-    font-style: italic;
-    font-size: 16px;
-    text-align: center;
-  }
-  
-  /* Grid for saved sevas */
-  .sevas-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-    gap: 20px;
-  }
-  
-  /* Each seva card */
-  .seva-item {
-    border: 1px solid #e2e8f0;
-    border-radius: 8px;
-    padding: 15px;
-    display: flex;
-    flex-direction: column;
-    gap: 12px;
-    background-color: #f9fafb;
-    box-shadow: 0 1px 3px rgb(0 0 0 / 0.1);
-    transition: box-shadow 0.2s ease;
-  }
-  
-  .seva-item:hover {
-    box-shadow: 0 4px 12px rgb(0 0 0 / 0.15);
-  }
-  
-  /* Header with name and delete button */
-  .seva-item-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-  }
-  
-  /* Seva name style */
-  .seva-name {
-    color: #1e3a8a;
-    font-weight: 600;
-    margin: 0;
-    max-width: 180px;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-  }
-  
-  /* Delete button */
-  .delete-button-seva {
-    background-color: #fee2e2;
-    color: #b91c1c;
-    border: none;
-    padding: 6px 12px;
-    border-radius: 6px;
-    font-weight: 600;
-    cursor: pointer;
-    transition: background-color 0.2s ease;
-  }
-  
-  .delete-button-seva:hover {
-    background-color: #fecaca;
-  }
-  
-  /* Seva image style */
-  .seva-image {
-    width: 100%;
-    height: 160px;
-    object-fit: cover;
-    border-radius: 6px;
-    user-select: none;
-  }
-  
-  /* Seva description and other texts */
-  .seva-description {
-    color: #475569;
-    font-size: 14px;
-    line-height: 1.4;
-  }
-  
-  .seva-item p {
-    margin: 0;
-    color: #475569;
-    font-size: 14px;
-  }
-  
-  /* Responsive Design */
-  @media (max-width: 1200px) {
-    .general-sevas-container {
+  margin-top: 100px;
+  margin-left: 250px;
+  padding: 30px;
+  min-height: calc(100vh - 100px);
+  background-color: #f1f5f9;
+  transition: margin-left 0.3s ease;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+/* Header Section */
+.general-sevas-header {
+  margin-bottom: 30px;
+}
+
+.general-sevas-header h2 {
+  font-size: 30px;
+  color: #1e40af;
+  margin-bottom: 8px;
+}
+
+.general-sevas-header p {
+  color: #64748b;
+  font-size: 16px;
+}
+
+/* Toast Message */
+.toast-message {
+  padding: 12px 18px;
+  border-radius: 8px;
+  margin-top: 10px;
+  font-weight: 500;
+  text-align: center;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+}
+
+.toast-message.success {
+  background-color: #d1fae5;
+  color: #065f46;
+}
+
+.toast-message.error {
+  background-color: #fee2e2;
+  color: #991b1b;
+}
+
+/* Form Card */
+.general-sevas-form-card {
+  background: #ffffff;
+  border-radius: 14px;
+  padding: 30px;
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.08);
+  max-width: 1400px;
+  margin-bottom: 40px;
+  transition: all 0.3s ease;
+}
+
+.general-sevas-form-card h3 {
+  font-size: 22px;
+  color: #1e40af;
+  margin-bottom: 20px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid #e2e8f0;
+}
+
+/* Form Styles */
+.general-sevas-form {
+  display: flex;
+  flex-direction: column;
+  gap: 22px;
+}
+
+/* Form Groups */
+.form-group-seva {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.form-group-seva label {
+  font-weight: 600;
+  color: #334155;
+}
+
+/* Inputs and Textarea */
+.input-seva,
+.textarea-seva {
+  padding: 12px 15px;
+  border: 1px solid #cbd5e1;
+  border-radius: 8px;
+  font-size: 15px;
+  transition: all 0.2s ease;
+  resize: vertical;
+}
+
+.input-seva:focus,
+.textarea-seva:focus {
+  outline: none;
+  border-color: #1e40af;
+  box-shadow: 0 0 0 4px rgba(30, 64, 175, 0.1);
+}
+
+/* File Upload */
+.file-upload-label-seva {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  cursor: pointer;
+  color: #1e40af;
+  font-weight: 600;
+}
+
+.file-input-seva {
+  display: none;
+}
+
+.file-upload-button-seva {
+  background-color: #e0f2fe;
+  color: #0369a1;
+  padding: 10px 18px;
+  border-radius: 8px;
+  font-weight: 600;
+  transition: all 0.2s ease;
+  width: fit-content;
+  text-align: center;
+}
+
+.file-upload-button-seva:hover {
+  background-color: #bae6fd;
+}
+
+/* Image Preview */
+.image-preview-container-seva {
+  margin-top: 15px;
+  border: 1px dashed #cbd5e1;
+  border-radius: 10px;
+  padding: 10px;
+  display: flex;
+  justify-content: center;
+  background-color: #f8fafc;
+}
+
+.image-preview-seva {
+  max-width: 100%;
+  max-height: 220px;
+  border-radius: 6px;
+  object-fit: contain;
+}
+
+/* Submit and Cancel Buttons */
+.submit-button-seva,
+.cancel-button-seva {
+  border: none;
+  padding: 12px 22px;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  align-self: flex-start;
+}
+
+.submit-button-seva {
+  background-color: #1e40af;
+  color: white;
+}
+
+.submit-button-seva:hover {
+  background-color: #1e3a8a;
+}
+
+.cancel-button-seva {
+  background-color: #e2e8f0;
+  color: #1e3a8a;
+  margin-left: 10px;
+}
+
+.cancel-button-seva:hover {
+  background-color: #cbd5e1;
+}
+
+/* Filter Buttons */
+.sevas-filter-buttons {
+  margin-bottom: 20px;
+  display: flex;
+  gap: 12px;
+}
+
+.sevas-filter-buttons button {
+  border: none;
+  padding: 8px 16px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 600;
+  transition: all 0.2s ease;
+  background-color: #e2e8f0;
+  color: #1e3a8a;
+}
+
+.sevas-filter-buttons button:hover {
+  background-color: #cbd5e1;
+}
+
+.sevas-filter-buttons .active-filter {
+  background-color: #1e40af;
+  color: white;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.15);
+}
+
+/* Saved Sevas Section */
+.saved-sevas-list {
+  background: #ffffff;
+  border-radius: 14px;
+  padding: 30px;
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.08);
+  max-width: 1400px;
+}
+
+.saved-sevas-list h3 {
+  color: #1e40af;
+  margin-bottom: 22px;
+}
+
+/* Empty message */
+.empty-message {
+  color: #64748b;
+  font-style: italic;
+  font-size: 16px;
+  text-align: center;
+}
+
+/* Grid for saved sevas */
+.sevas-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 22px;
+}
+
+/* Each seva card */
+.seva-item {
+  border: 1px solid #e2e8f0;
+  border-radius: 10px;
+  padding: 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  background-color: #f9fafb;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.08);
+  transition: all 0.3s ease;
+}
+
+.seva-item:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.12);
+}
+
+/* Header with name and buttons */
+.seva-item-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 8px;
+}
+
+.seva-item-header h4 {
+  color: #1e40af;
+  font-weight: 600;
+  margin: 0;
+  max-width: 160px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.delete-button-seva {
+  background-color: #fee2e2;
+  color: #b91c1c;
+  padding: 6px 14px;
+  border-radius: 8px;
+}
+
+.delete-button-seva:hover {
+  background-color: #fecaca;
+}
+
+.edit-button-seva {
+  background-color: #e0f2fe;
+  color: #0369a1;
+  padding: 6px 14px;
+  border-radius: 8px;
+}
+
+.edit-button-seva:hover {
+  background-color: #bae6fd;
+}
+
+/* Seva Image */
+.seva-image {
+  width: 100%;
+  height: 180px;
+  object-fit: cover;
+  border-radius: 8px;
+  user-select: none;
+}
+
+/* Seva Description & Text */
+.seva-item p {
+  margin: 0;
+  color: #475569;
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+/* Responsive Design */
+@media (max-width: 1200px) {
+  .general-sevas-container {
       margin-left: 0;
       padding: 20px;
-    }
-    .general-sevas-form-card,
-    .saved-sevas-list {
-      max-width: 100%;
-    }
-    .sevas-grid {
-      grid-template-columns: 1fr;
-    }
   }
-  
+  .general-sevas-form-card,
+  .saved-sevas-list {
+      max-width: 100%;
+  }
+  .sevas-grid {
+      grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 768px) {
+  .general-sevas-container {
+      padding: 15px;
+  }
+  .submit-button-seva,
+  .cancel-button-seva,
+  .sevas-filter-buttons button {
+      width: 100%;
+      text-align: center;
+  }
+  .form-group-seva input,
+  .form-group-seva select,
+  .form-group-seva textarea {
+      font-size: 14px;
+  }
+}

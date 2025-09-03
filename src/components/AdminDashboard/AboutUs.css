@@ -1,125 +1,293 @@
 .aboutus-page {
-    margin-top: 110px; /* below topbar */
-    margin-left: 260px; /* space for sidebar */
+  margin-top: 110px; /* below topbar */
+  margin-left: 260px; /* space for sidebar */
+  padding: 30px;
+  background: #f8fafc;
+  min-height: calc(100vh - 110px);
+  transition: margin-left 0.3s ease;
+}
+
+/* Header */
+.aboutus-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 30px;
+}
+
+.aboutus-header label {
+  font-weight: 600;
+  color: #1e3a8a;
+}
+
+.aboutus-header select {
+  padding: 8px 14px;
+  border-radius: 8px;
+  border: 1px solid #cbd5e1;
+  font-size: 14px;
+  background: white;
+  transition: border 0.2s ease, box-shadow 0.2s ease;
+}
+
+.aboutus-header select:focus {
+  outline: none;
+  border-color: #1e40af;
+  box-shadow: 0 0 0 3px rgba(30, 64, 175, 0.15);
+}
+
+/* Content Layout */
+.aboutus-content {
+  display: grid;
+  gap: 25px;
+}
+
+/* Card Styles */
+.aboutus-card {
+  background: white;
+  padding: 25px;
+  border-radius: 12px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+  transition: transform 0.2s ease;
+}
+
+.aboutus-card:hover {
+  transform: translateY(-2px);
+}
+
+.aboutus-card h3 {
+  margin-bottom: 18px;
+  font-size: 18px;
+  font-weight: 600;
+  color: #1e3a8a;
+  border-bottom: 1px solid #e2e8f0;
+  padding-bottom: 10px;
+}
+
+/* Form Styles */
+.aboutus-card form {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.aboutus-card input,
+.aboutus-card textarea {
+  padding: 12px 14px;
+  border-radius: 8px;
+  border: 1px solid #cbd5e1;
+  font-size: 14px;
+  transition: all 0.2s ease;
+}
+
+.aboutus-card input:focus,
+.aboutus-card textarea:focus {
+  outline: none;
+  border-color: #1e40af;
+  box-shadow: 0 0 0 3px rgba(30, 64, 175, 0.15);
+}
+
+/* Buttons */
+.aboutus-card button {
+  background: #1e3a8a;
+  color: white;
+  padding: 10px 18px;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 500;
+  font-size: 14px;
+  transition: background 0.3s ease;
+}
+
+.aboutus-card button:hover {
+  background: #1e40af;
+}
+
+/* Disabled states */
+textarea:disabled,
+button:disabled {
+  cursor: not-allowed;
+  background-color: #f1f5f9;
+  color: #94a3b8;
+  opacity: 0.8;
+}
+
+/* Mission Items */
+.mission-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 14px 16px;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  margin-bottom: 12px;
+  background: #f9fafb;
+  transition: background 0.2s ease;
+}
+
+.mission-item:hover {
+  background: #f1f5f9;
+}
+
+.mission-item p {
+  flex: 1;
+  margin: 0;
+  font-size: 15px;
+  color: #334155;
+}
+
+/* Mission actions */
+.mission-actions {
+  display: flex;
+  gap: 10px;
+}
+
+.edit-btn {
+  background: #0ea5e9;
+  color: white;
+  border: none;
+  padding: 6px 14px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 13px;
+  transition: background 0.3s ease;
+}
+
+.edit-btn:hover {
+  background: #0284c7;
+}
+
+
+
+/* Activities */
+.activity-item {
+  display: flex;
+  gap: 15px;
+  align-items: flex-start;
+  padding: 14px;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  background: #f9fafb;
+  margin-bottom: 15px;
+  transition: background 0.2s ease;
+}
+
+.activity-item:hover {
+  background: #f1f5f9;
+}
+
+.activity-item h4 {
+  margin: 0;
+  font-size: 16px;
+  font-weight: 600;
+  color: #1e293b;
+}
+
+.activity-item p {
+  margin: 6px 0;
+  font-size: 14px;
+  color: #475569;
+  line-height: 1.4;
+}
+
+.activity-image {
+  border-radius: 8px;
+  border: 1px solid #e2e8f0;
+  max-width: 150px;
+  height: auto;
+  object-fit: cover;
+}
+
+.activity-actions {
+  display: flex;
+  gap: 10px;
+  margin-top: 8px;
+}
+
+.empty-text {
+  color: #94a3b8;
+  font-size: 14px;
+  text-align: center;
+  padding: 12px;
+}
+
+/* Responsive */
+@media (max-width: 1024px) {
+  .aboutus-page {
+    margin-left: 0;
     padding: 20px;
-    background: #f8f9fa;
-    min-height: calc(100vh - 110px);
   }
-  
-  .aboutus-header {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    margin-bottom: 25px;
-  }
-  
-  .aboutus-header label {
-    font-weight: 600;
-  }
-  
-  .aboutus-header select {
-    padding: 8px 12px;
-    border-radius: 6px;
-    border: 1px solid #ccc;
-  }
-  
-  .aboutus-content {
-    display: grid;
-    gap: 20px;
-  }
-  
-  .aboutus-card {
-    background: white;
-    padding: 20px;
-    border-radius: 10px;
-    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
-  }
-  
-  .aboutus-card h3 {
-    margin-bottom: 15px;
-  }
-  
-  .aboutus-card form {
-    display: flex;
-    flex-direction: column;
-    gap: 12px;
-  }
-  
-  .aboutus-card input,
-  .aboutus-card textarea {
-    padding: 10px;
-    border-radius: 6px;
-    border: 1px solid #ccc;
-  }
-  
-  .aboutus-card button {
-    background: #2a6edc;
-    color: white;
-    padding: 10px 15px;
-    border: none;
-    border-radius: 6px;
-    cursor: pointer;
-    font-weight: 500;
-    transition: background 0.3s ease;
-  }
-  
-  .aboutus-card button:hover {
-    background: #1e4fad;
-  }
-  
-  .preview-img {
-    width: 100%;
-    max-height: 200px;
-    object-fit: cover;
-    border-radius: 6px;
-  }
-  
+}
+
+@media (max-width: 768px) {
   .activity-item {
-    display: flex;
-    gap: 15px;
-    align-items: flex-start;
-    margin-bottom: 15px;
+    flex-direction: column;
   }
-  
-  .activity-img {
-    width: 100px;
-    height: 80px;
-    object-fit: cover;
-    border-radius: 6px;
+
+  .activity-image {
+    width: 100%;
+    max-width: 100%;
+    height: auto;
   }
-  
-  .empty-text {
-    color: #888;
-  }
-  
-  .delete-btn {
-    background: #dc3545;
-    color: white;
-    border: none;
-    padding: 6px 10px;
-    border-radius: 4px;
-    cursor: pointer;
-  }
-  
-  .delete-btn:hover {
-    background: #b02a37;
-  }
-  
-  @media (max-width: 1024px) {
-    .aboutus-page {
-      margin-left: 0;
-      padding: 15px;
-    }
-  }
-  
-  @media (max-width: 768px) {
-    .activity-item {
-      flex-direction: column;
-    }
-  
-    .activity-img {
-      width: 100%;
-      height: auto;
-    }
-  }
-  
+}
+/* Delete/Remove buttons */
+
+.aboutus-card .delete-btn {
+  background: #ef4444; /* Red */
+  color: white;
+}
+
+.aboutus-card .delete-btn:hover {
+  background: #b91c1c;
+}
+
+.aboutus-card .edit-btn {
+  background: #0ea5e9;
+  color: white;
+}
+
+.aboutus-card .edit-btn:hover {
+  background: #0284c7;
+}
+
+.aboutus-card .confirm-yes {
+  background: #b91c1c;
+}
+
+.aboutus-card .confirm-no {
+  background: #6b7280;
+}
+
+
+
+/* Inline delete confirmation buttons */
+.confirm-yes {
+  background: #b91c1c; /* Dark red */
+  color: white;
+  border: none;
+  padding: 6px 14px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 13px;
+  margin-right: 5px;
+  transition: background 0.3s ease;
+}
+
+.confirm-yes:hover {
+  background: #7f1d1d;
+}
+
+.confirm-no {
+  background: #6b7280; /* Gray */
+  color: white;
+  border: none;
+  padding: 6px 14px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 13px;
+  transition: background 0.3s ease;
+}
+
+.confirm-no:hover {
+  background: #4b5563;
+}

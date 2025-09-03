@@ -27,38 +27,39 @@ const PrivateRoute = ({ isAuthenticated }) => {
 const Routers = ({ isAuthenticated, setIsAuthenticated }) => {
   return (
     <Router>
-      <Routes>
-        {/* Public - Login & Signup */}
-        <Route path="/login" element={<Login setIsAuthenticated={setIsAuthenticated} />} />
-        <Route path="/signup" element={<SignUp setIsAuthenticated={setIsAuthenticated} />} />
+   <Routes>
+  {/* Default - always go to login when visiting "/" */}
+  <Route path="/" element={<Navigate to="/login" replace />} />
 
-        {/* Private - Dashboard + Admin routes */}
-        <Route path="/" element={<PrivateRoute isAuthenticated={isAuthenticated} />}>
-          <Route element={<DashboardLayout />}>
-            {/* Default redirect */}
-            <Route index element={<Navigate to="/dashboard" replace />} />
+  {/* Public - Login & Signup */}
+  <Route path="/login" element={<Login setIsAuthenticated={setIsAuthenticated} />} />
+  <Route path="/signup" element={<SignUp setIsAuthenticated={setIsAuthenticated} />} />
 
-            <Route path="dashboard" element={<Dashboard />} />
-            <Route path="temple-bookings" element={<TempleBookings />} />
-            <Route path="event-bookings" element={<EventBookings />} />
-            <Route path="seva-bookings" element={<SevaBookings />} />
+  {/* Private - Dashboard + Admin routes */}
+  <Route element={<PrivateRoute isAuthenticated={isAuthenticated} />}>
+    <Route element={<DashboardLayout />}>
+      <Route path="/dashboard" element={<Dashboard />} />
+      <Route path="/temple-bookings" element={<TempleBookings />} />
+      <Route path="/event-bookings" element={<EventBookings />} />
+      <Route path="/seva-bookings" element={<SevaBookings />} />
 
-            <Route path="banner" element={<Banner />} />
-            <Route path="add-events" element={<Events />} />
-            <Route path="recurring-events" element={<RecurringEvents />} />
-            <Route path="gallery" element={<Gallery />} />
-            <Route path="scrolling" element={<Scrolling />} />
-            <Route path="youtube" element={<Youtube />} />
-            <Route path="aboutus" element={<AboutUs />} />
-            <Route path="add-sevas" element={<AddSevas />} />
-            <Route path="publications" element={<Publications />} />
-            <Route path="change-password" element={<ChangePassword />} />
+      <Route path="/banner" element={<Banner />} />
+      <Route path="/add-events" element={<Events />} />
+      <Route path="/recurring-events" element={<RecurringEvents />} />
+      <Route path="/gallery" element={<Gallery />} />
+      <Route path="/scrolling" element={<Scrolling />} />
+      <Route path="/youtube" element={<Youtube />} />
+      <Route path="/aboutus" element={<AboutUs />} />
+      <Route path="/add-sevas" element={<AddSevas />} />
+      <Route path="/publications" element={<Publications />} />
+      <Route path="/change-password" element={<ChangePassword />} />
 
-            {/* Catch-all */}
-            <Route path="*" element={<Navigate to="/dashboard" replace />} />
-          </Route>
-        </Route>
-      </Routes>
+      {/* Catch-all */}
+      <Route path="*" element={<Navigate to="/dashboard" replace />} />
+    </Route>
+  </Route>
+</Routes>
+
     </Router>
   );
 };
