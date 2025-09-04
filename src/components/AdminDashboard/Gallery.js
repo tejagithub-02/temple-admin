@@ -91,8 +91,7 @@ const Gallery = () => {
   };
 
   const handleDelete = async (id) => {
-    if (!window.confirm("Are you sure you want to delete this item?")) return;
-
+   
     try {
       const res = await axiosAuth.delete(`/delete/${id}`);
       if (res.data.status) {
@@ -108,7 +107,8 @@ const Gallery = () => {
   const handleEdit = (item) => {
     setEditingItem(item);
     setTitle(item.title);
-    setImagePreview(item.img); // ✅ use actual image URL
+    setImagePreview(item.img);
+    document.getElementById("edit-form")?.scrollIntoView({ behavior: "smooth" });
   };
 
   const resetForm = () => {
@@ -118,7 +118,7 @@ const Gallery = () => {
     setEditingItem(null);
   };
 
-  // ✅ Function to show messages
+
   const showMessage = (text, type = "success") => {
     setMessage(text);
     setMessageType(type);
@@ -126,7 +126,7 @@ const Gallery = () => {
   };
 
   return (
-    <div className="gallery-admin-container">
+    <div className="gallery-admin-container" id="edit-form">
       <div className="gallery-admin-header">
         <h2>Gallery Management</h2>
         <p>Upload and manage gallery images with titles</p>

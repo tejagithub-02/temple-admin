@@ -101,8 +101,7 @@ const RecurringEvents = () => {
   };
   
   const handleDelete = async (id) => {
-    if (!window.confirm("Are you sure you want to delete this event?")) return;
-
+    
     try {
       const res = await axiosAuth.delete(`/deleteRecurring/${id}`);
       if (res.data.success) {

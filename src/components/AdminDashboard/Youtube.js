@@ -9,6 +9,8 @@ const Youtube = () => {
   const [videos, setVideos] = useState([]);
   const [editingVideo, setEditingVideo] = useState(null);
   const [loading, setLoading] = useState(false);
+  const [message, setMessage] = useState(null); // ✅ message state
+  const [messageType, setMessageType] = useState("success");
 
   const token = localStorage.getItem("userToken");
 
@@ -20,6 +22,13 @@ const Youtube = () => {
     },
   });
 
+  // ✅ show notification
+  const showMessage = (text, type = "success") => {
+    setMessage(text);
+    setMessageType(type);
+    setTimeout(() => setMessage(null), 3000);
+  };
+
   // ✅ Fetch videos
   const fetchVideos = async () => {
     try {
@@ -29,7 +38,7 @@ const Youtube = () => {
       }
     } catch (err) {
       console.error("Error fetching videos:", err);
-      alert("Failed to fetch videos.");
+      showMessage("Failed to fetch videos", "error");
     }
   };
 
@@ -37,7 +46,7 @@ const Youtube = () => {
   const handleSaveVideo = async (e) => {
     e.preventDefault();
     if (!videoLink.trim()) {
-      alert("Please enter a valid YouTube link");
+      showMessage("Please enter a valid YouTube link", "error");
       return;
     }
 
@@ -49,7 +58,7 @@ const Youtube = () => {
         });
 
         if (res.data.success) {
-          alert("Video updated successfully!");
+          showMessage("Video updated successfully!", "success");
           setEditingVideo(null);
           setVideoLink("");
           fetchVideos();
@@ -60,14 +69,14 @@ const Youtube = () => {
         });
 
         if (res.data.success) {
-          alert("Video added successfully!");
+          showMessage("Video added successfully!", "success");
           setVideoLink("");
           fetchVideos();
         }
       }
     } catch (err) {
       console.error("Error saving video:", err);
-      alert("Failed to save video.");
+      showMessage("Failed to save video", "error");
     } finally {
       setLoading(false);
     }
@@ -75,20 +84,21 @@ const Youtube = () => {
 
   // ✅ Delete video
   const handleDelete = async (id) => {
-    if (!window.confirm("Are you sure you want to delete this video?")) return;
-
+  
     try {
       const res = await axiosAuth.delete(`/deleteYouTube/${id}`, {
         data: { _id: id },
       });
 
       if (res.data.success) {
-        alert("Video deleted successfully!");
+        showMessage("Video deleted successfully!", "success");
         fetchVideos();
+      } else {
+        showMessage("Failed to delete video", "error");
       }
     } catch (err) {
       console.error("Error deleting video:", err);
-      alert("Failed to delete video.");
+      showMessage("Error deleting video", "error");
     }
   };
 
@@ -116,6 +126,13 @@ const Youtube = () => {
       <div className="video-admin-header">
         <h2>YouTube Video Management</h2>
       </div>
+
+      {/* ✅ Toast Message */}
+      {message && (
+        <div className={`toast-message ${messageType}`}>
+          {message}
+        </div>
+      )}
 
       <div className="video-admin-content">
         {/* Upload Section */}
@@ -202,6 +219,7 @@ const Youtube = () => {
                       onClick={() => {
                         setEditingVideo(video);
                         setVideoLink(video.you_tube_link);
+                        document.getElementById("edit-form")?.scrollIntoView({ behavior: "smooth" });
                       }}
                       className="btn edit-btn"
                     >

@@ -178,7 +178,8 @@ const AddSevas = () => {
           setDate(seva.date ? seva.date.split("T")[0] : "");
         }
         setImagePreview(seva.img || null);
-        window.scrollTo({ top: 0, behavior: "smooth" });
+        document.getElementById("edit")?.scrollIntoView({ behavior: "smooth" });
+        
       }
     } catch (err) {
       console.error(err);
@@ -187,11 +188,10 @@ const AddSevas = () => {
   };
 
   const handleDelete = async (id) => {
-    if (!window.confirm("Are you sure you want to delete this seva?")) return;
     try {
       const res = await axiosAuth.delete(`/deleteSeva/${id}`);
       if (res.data.success) {
-        showMessage("Seva deleted successfully");
+        showMessage("Seva deleted successfully", "success"); // ✅ your custom message
         setSavedSevas(savedSevas.filter((seva) => seva._id !== id));
       }
     } catch (err) {
@@ -199,6 +199,7 @@ const AddSevas = () => {
       showMessage("Failed to delete seva", "error");
     }
   };
+  
 
   return (
     <div className="general-sevas-container">
@@ -207,7 +208,7 @@ const AddSevas = () => {
         {message && <div className={`toast-message ${messageType}`}>{message}</div>}
       </header>
 
-      <section className="general-sevas-form-card">
+      <section id="edit" className="general-sevas-form-card">
         <h3>Seva Details</h3>
         <form className="general-sevas-form" onSubmit={handleSubmit}>
           {/* Seva Type */}

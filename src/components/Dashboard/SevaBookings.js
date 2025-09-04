@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
+import Swal from "sweetalert2";
 import "./SevaBookings.css";
 
 export default function SevaBookings() {
@@ -8,7 +9,7 @@ export default function SevaBookings() {
     fromDate: "",
     toDate: "",
     status: "All",
-  
+    
   });
 
   const [bookings, setBookings] = useState([]);
@@ -52,7 +53,8 @@ export default function SevaBookings() {
           pincode: b.pincode,
           bookeddate: b.createdAt?.split("T")[0],
           amount: b.sava_id?.price || 0,
-          payment: b.payment_screenshot ? "Online" : "Cash",
+payment: b.booking_type || "N/A",   // directly from backend
+
           screenshot: b.payment_screenshot,
           status: b.status.charAt(0).toUpperCase() + b.status.slice(1),
         }));
@@ -65,7 +67,15 @@ export default function SevaBookings() {
     }
   };
 
-  // Update booking status
+  const Toast = Swal.mixin({
+    toast: true,
+    position: "top-end",
+    showConfirmButton: false,
+    timer: 2000,
+    timerProgressBar: true,
+  });
+  
+
   const updateStatus = async (id, newStatus) => {
     try {
       setUpdatingId(id);
@@ -76,13 +86,24 @@ export default function SevaBookings() {
         setBookings((prev) =>
           prev.map((b) => (b.id === id ? { ...b, status: newStatus } : b))
         );
+  
+        // ✅ Toast notification
+        Toast.fire({
+          icon: "success",
+          title: `Booking ${newStatus} successfully!`,
+        });
       }
     } catch (err) {
       console.error("Error updating status:", err.response?.data || err.message);
+      Toast.fire({
+        icon: "error",
+        title: `Failed to ${newStatus.toLowerCase()} booking!`,
+      });
     } finally {
       setUpdatingId(null);
     }
   };
+  
 
   // Filters
   const handleFilterChange = (e) => {
@@ -96,7 +117,7 @@ export default function SevaBookings() {
       fromDate: "",
       toDate: "",
       status: "All",
-      
+ 
     });
   };
 
@@ -107,24 +128,34 @@ export default function SevaBookings() {
       (!filters.seva || b.seva.toLowerCase().includes(filters.seva.toLowerCase())) &&
       afterFrom &&
       beforeTo &&
-      (filters.status === "All" || b.status === filters.status) 
-     
+      (filters.status === "All" || b.status === filters.status)
     );
   });
+  
+  
 
-  const totalAmount = filteredBookings.reduce((sum, b) => sum + b.amount, 0);
+  const totalAmount = filteredBookings
+  .filter((b) => b.payment?.toLowerCase() === "online")  // only online like table
+  .reduce((sum, b) => sum + b.amount, 0);
 
   const approveAll = async () => {
     const toApprove = filteredBookings.filter((b) => b.status !== "Approved");
     if (toApprove.length === 0) {
-      alert("All visible bookings are already approved!");
+      Toast.fire({
+        icon: "info",
+        title: "All visible bookings are already approved!",
+      });
       return;
     }
     for (const b of toApprove) {
       await updateStatus(b.id, "Approved");
     }
-    alert("All visible bookings approved successfully!");
+    Toast.fire({
+      icon: "success",
+      title: "All visible bookings approved successfully!",
+    });
   };
+  
 
   if (loading) return <div>Loading bookings...</div>;
 
@@ -152,6 +183,8 @@ export default function SevaBookings() {
           <label>To Date</label>
           <input type="date" name="toDate" value={filters.toDate} onChange={handleFilterChange} />
         </div>
+        
+
         <div className="form-group">
           <label>Status</label>
           <select name="status" value={filters.status} onChange={handleFilterChange}>
@@ -214,65 +247,72 @@ export default function SevaBookings() {
             </tr>
           </thead>
           <tbody>
-            {filteredBookings.map((b, index) => (
-              <tr key={b.id}>
-                <td>{index + 1}</td>
-                <td>{b.id}</td>
-                <td>{b.name}</td>
-                <td>{b.mobile}</td>
-                <td>{b.seva}</td>
-                <td>{b.sevadate}</td>
-                <td>{b.gotra}</td>
-                <td>{b.nakshatra}</td>
-                <td>{b.raashi}</td>
-                <td>{b.district}</td>
-                <td>{b.state}</td>
-                <td>{b.address}</td>
-                <td>{b.pincode}</td>
-                <td>{b.bookeddate}</td>
-                <td>₹{b.amount.toFixed(2)}</td>
-                <td>{b.payment}</td>
-                <td>
-                  {b.screenshot && (
-                    <img
-                      src={b.screenshot}
-                      alt="screenshot"
-                      width="60"
-                      height="60"
-                      style={{ cursor: "pointer" }}
-                      onClick={() => setViewImage(b.screenshot)}
-                    />
-                  )}
-                </td>
-                <td
-                  className={
-                    b.status === "Approved"
-                      ? "status-approved"
-                      : b.status === "Rejected"
-                      ? "status-rejected"
-                      : "status-pending"
-                  }
-                >
-                  {b.status}
-                </td>
-                <td>
-                  <button
-                    className="btn btn-success btn-sm"
-                    onClick={() => updateStatus(b.id, "Approved")}
-                    disabled={updatingId === b.id}
-                  >
-                    {updatingId === b.id && b.status !== "Approved" ? "Approving..." : "Approve"}
-                  </button>
-                  <button
-                    className="btn btn-danger btn-sm"
-                    onClick={() => updateStatus(b.id, "Rejected")}
-                    disabled={updatingId === b.id}
-                  >
-                    {updatingId === b.id && b.status !== "Rejected" ? "Rejecting..." : "Reject"}
-                  </button>
-                </td>
-              </tr>
-            ))}
+          {filteredBookings
+  .filter((b) => b.payment?.toLowerCase() === "online")  // ✅ only online rows
+  .map((b, index) => (
+    <tr key={b.id}>
+      <td>{index + 1}</td>
+      <td>{b.id}</td>
+      <td>{b.name}</td>
+      <td>{b.mobile}</td>
+      <td>{b.seva}</td>
+      <td>{b.sevadate}</td>
+      <td>{b.gotra}</td>
+      <td>{b.nakshatra}</td>
+      <td>{b.raashi}</td>
+      <td>{b.district}</td>
+      <td>{b.state}</td>
+      <td>{b.address}</td>
+      <td>{b.pincode}</td>
+      <td>{b.bookeddate}</td>
+      <td>₹{b.amount.toFixed(2)}</td>
+      <td>{b.payment}</td>
+      <td>
+        {b.screenshot && (
+          <img
+            src={b.screenshot}
+            alt="screenshot"
+            width="60"
+            height="60"
+            style={{ cursor: "pointer" }}
+            onClick={() => setViewImage(b.screenshot)}
+          />
+        )}
+      </td>
+      <td
+        className={
+          b.status === "Approved"
+            ? "status-approved"
+            : b.status === "Rejected"
+            ? "status-rejected"
+            : "status-pending"
+        }
+      >
+        {b.status}
+      </td>
+      <td>
+        <button
+          className="btn btn-success btn-sm"
+          onClick={() => updateStatus(b.id, "Approved")}
+          disabled={updatingId === b.id}
+        >
+          {updatingId === b.id && b.status !== "Approved"
+            ? "Approving..."
+            : "Approve"}
+        </button>
+        <button
+          className="btn btn-danger btn-sm"
+          onClick={() => updateStatus(b.id, "Rejected")}
+          disabled={updatingId === b.id}
+        >
+          {updatingId === b.id && b.status !== "Rejected"
+            ? "Rejecting..."
+            : "Reject"}
+        </button>
+      </td>
+    </tr>
+  ))}
+
           </tbody>
         </table>
       </div>

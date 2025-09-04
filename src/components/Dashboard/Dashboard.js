@@ -58,10 +58,24 @@ const DashboardStats = () => {
       const res = await axiosAuthSeva.get("/getAll");
       if (res.data.success) {
         const data = res.data.data;
-        setSevaBookings(data);
-        const pending = data.filter((b) => b.status?.toLowerCase() === "pending").length;
-        const rejected = data.filter((b) => b.status?.toLowerCase() === "rejected").length;
-        const approved = data.filter((b) => b.status?.toLowerCase() === "approved").length;
+  
+        // ✅ Only Online payments
+        const onlineBookings = data.filter((b) => b.payment_screenshot);
+  
+        setSevaBookings(onlineBookings);
+  
+        const pending = onlineBookings.filter(
+          (b) => b.status?.toLowerCase() === "pending"
+        ).length;
+  
+        const rejected = onlineBookings.filter(
+          (b) => b.status?.toLowerCase() === "rejected"
+        ).length;
+  
+        const approved = onlineBookings.filter(
+          (b) => b.status?.toLowerCase() === "approved"
+        ).length;
+  
         setSevaStats({ pending, approved, rejected });
       }
     } catch (err) {
@@ -70,13 +84,15 @@ const DashboardStats = () => {
       setLoadingSevas(false);
     }
   };
-
   const fetchTempleCount = async () => {
     try {
       const res = await axiosAuthSeva.get("/getAll");
       if (res.data.success) {
         const approvedBookings = res.data.data.filter(
-          (b) => b.status?.toLowerCase() === "approved"
+          (b) =>
+            b.status?.toLowerCase() === "approved" &&
+            (b.booking_type?.toLowerCase() === "upi" ||
+             b.booking_type?.toLowerCase() === "offline")
         );
         setTempleCount(approvedBookings.length);
       }
@@ -84,7 +100,7 @@ const DashboardStats = () => {
       console.error("Error fetching temple bookings:", err);
     }
   };
-
+  
   // CSV download for Events
   const downloadEventCSV = () => {
     if (!eventBookings.length) return alert("No event bookings to export!");

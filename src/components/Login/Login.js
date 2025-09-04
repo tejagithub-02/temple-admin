@@ -2,7 +2,10 @@ import { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { FaUser, FaLock } from "react-icons/fa";
 import axios from "axios";
+import Swal from "sweetalert2";   // ✅ Import SweetAlert2
 import "./Auth.css";
+
+const API_BASE = process.env.REACT_APP_BACKEND_API; // must end with /
 
 export default function Login({ setIsAuthenticated }) {
   const [email, setEmail] = useState("");
@@ -14,37 +17,52 @@ export default function Login({ setIsAuthenticated }) {
     e.preventDefault();
 
     if (!email || !password) {
-      alert("Please enter email and password.");
+      Swal.fire({
+        icon: "warning",
+        title: "Missing Fields",
+        text: "Please enter email and password.",
+        confirmButtonColor: "#6366f1",
+      });
       return;
     }
 
     try {
-      // API request
-      const res = await axios.post(
-        "https://testtapi1.ap-1.evennode.com/api/admin/loginAdmin",
-        { email, password}
-      );
+      const res = await axios.post(`${API_BASE}api/admin/loginAdmin`, { email, password });
 
       if (res.data.status) {
-        alert(res.data.message);
+        Swal.fire({
+          icon: "success",
+          title: "Login Successful",
+          text: res.data.message,
+          timer: 2000,
+          showConfirmButton: false,
+        });
 
-        // Save token and user info to localStorage
+        // Save token and user info
         localStorage.setItem("isLoggedIn", "true");
         localStorage.setItem("userToken", res.data.admin.tokens[0].token);
         localStorage.setItem("userEmail", res.data.admin.email);
         localStorage.setItem("userRole", res.data.admin.role);
         localStorage.setItem("userId", res.data.admin._id);
+
         setIsAuthenticated(true);
-        navigate("/dashboard");
+        setTimeout(() => navigate("/dashboard"), 2000); // redirect after popup
       } else {
-        alert("Login failed. Please check your credentials.");
+        Swal.fire({
+          icon: "error",
+          title: "Login Failed",
+          text: "Please check your credentials.",
+          confirmButtonColor: "#ef4444",
+        });
       }
     } catch (error) {
       console.error("Login error:", error);
-      alert(
-        error.response?.data?.message ||
-          "Something went wrong. Please try again later."
-      );
+      Swal.fire({
+        icon: "error",
+        title: "Oops...",
+        text: error.response?.data?.message || "Something went wrong. Please try again later.",
+        confirmButtonColor: "#ef4444",
+      });
     }
   };
 

@@ -84,8 +84,42 @@ const Events = () => {
   };
 
   const handleEventDateChange = (id, field, value) => {
-    setEventDates((prev) => prev.map((ed) => (ed.id === id ? { ...ed, [field]: value } : ed)));
+    if (field === "date" && value && fromDate && toDate) {
+      const selected = new Date(value);
+      const from = new Date(fromDate);
+      const to = new Date(toDate);
+  
+      // 1. Full date range check
+      if (selected < from || selected > to) {
+        showNotification(
+          `Pooja date must be between ${fromDate} and ${toDate}`,
+          "warning"
+        );
+        return;
+      }
+  
+      // 2. Month-Year check (only if from and to are in different months/years)
+      const fromYM = from.getFullYear() * 12 + from.getMonth();
+      const toYM = to.getFullYear() * 12 + to.getMonth();
+      const selectedYM = selected.getFullYear() * 12 + selected.getMonth();
+  
+      if (fromYM !== toYM) {
+        if (selectedYM < fromYM || selectedYM > toYM) {
+          showNotification(
+            "Pooja date must be within the From–To month/year range",
+            "warning"
+          );
+          return;
+        }
+      }
+    }
+  
+    // ✅ Save valid value
+    setEventDates((prev) =>
+      prev.map((ed) => (ed.id === id ? { ...ed, [field]: value } : ed))
+    );
   };
+  
 
   const handleAddEventDate = () => {
     setEventDates((prev) => [...prev, { id: Date.now(), date: "", sevaName: "", price: "" }]);
@@ -106,6 +140,11 @@ const Events = () => {
       setDetailImages({ ...event.detailImages });
       setEventDates(event.eventDates.map((d) => ({ ...d })));
       setEditingId(id);
+        // Scroll to form by ID
+    const formElement = document.getElementById("event-form");
+    if (formElement) {
+      formElement.scrollIntoView({ behavior: "smooth", block: "start" });
+    }
     }
   };
 
@@ -207,7 +246,7 @@ formData.append("existingImages", JSON.stringify(existingImages));
   };
 
   return (
-    <div className="events-container">
+    <div className="events-container" id="event-form">
       {notification && <div className={`notification ${notification.type}`}>{notification.message}</div>}
       <h2>Events Management</h2>
 

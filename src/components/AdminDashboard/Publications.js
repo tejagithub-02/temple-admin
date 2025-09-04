@@ -85,6 +85,7 @@ const Publications =() =>
   const handleEditFileChange = (e) => {
     const file = e.target.files[0];
     if (file) setEditFile(file);
+  
   };
 
   // Add Book
@@ -203,7 +204,7 @@ const Publications =() =>
   };
 
   return (
-    <div className="page-container">
+    <div className="page-container" id="edit-form">
       {notification && (
         <div className={`notification ${notification.type}`}>
           {notification.message}
@@ -224,45 +225,45 @@ const Publications =() =>
         </select>
       </div>
 
-      {/* EDIT FORM */}
-      {editingItem && (
-        <div className="edit-form-container">
-          <h2>Edit {editingItem.type}</h2>
-          <form className="form" onSubmit={handleUpdatePublication}>
-            <div className="form-group">
-              <label>Title *</label>
-              <input
-                type="text"
-                value={editTitle}
-                onChange={(e) => setEditTitle(e.target.value)}
-                required
-              />
-            </div>
-            {editingItem.type === "Books" && (
-              <div className="form-group">
-                <label>Description</label>
-                <textarea
-                  rows={4}
-                  value={editDescription}
-                  onChange={(e) => setEditDescription(e.target.value)}
-                />
-              </div>
-            )}
-            <div className="form-group">
-              <label>Upload New File (optional)</label>
-              <input type="file" onChange={handleEditFileChange} />
-            </div>
-            <button type="submit" className="primary-button">Update</button>
-            <button
-              type="button"
-              className="secondary-button"
-              onClick={() => setEditingItem(null)}
-            >
-              Cancel
-            </button>
-          </form>
+     {/* EDIT FORM */}
+{editingItem && (
+  <div className="edit-form-container" id="edit-form">
+    <h2>Edit {editingItem.type}</h2>
+    <form className="form" onSubmit={handleUpdatePublication}>
+      <div className="form-group">
+        <label>Title *</label>
+        <input
+          type="text"
+          value={editTitle}
+          onChange={(e) => setEditTitle(e.target.value)}
+          required
+        />
+      </div>
+      {editingItem.type === "Books" && (
+        <div className="form-group">
+          <label>Description</label>
+          <textarea
+            rows={4}
+            value={editDescription}
+            onChange={(e) => setEditDescription(e.target.value)}
+          />
         </div>
       )}
+      <div className="form-group">
+        <label>Upload New File (optional)</label>
+        <input type="file" onChange={handleEditFileChange} />
+      </div>
+      <button type="submit" className="primary-button">Update</button>
+      <button
+        type="button"
+        className="secondary-button"
+        onClick={() => setEditingItem(null)}
+      >
+        Cancel
+      </button>
+    </form>
+  </div>
+)}
 
       {/* BOOKS */}
       {selectedType === "Books" && (
@@ -316,6 +317,8 @@ const Publications =() =>
                         setEditTitle(title);
                         setEditDescription(description);
                         setEditFile(null);
+                        document.getElementById("edit-form")?.scrollIntoView({ behavior: "smooth" });
+
                       }}
                     >
                       Edit

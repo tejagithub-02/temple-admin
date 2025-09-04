@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
+import Swal from "sweetalert2";
 import "./EventBookings.css";
 
 export default function EventBookings() {
@@ -15,7 +16,6 @@ export default function EventBookings() {
   const [viewImage, setViewImage] = useState(null);
   const [updatingId, setUpdatingId] = useState(null);
 
-  // ✅ Setup API with token (like Scrolling.js)
   const API_BASE = process.env.REACT_APP_BACKEND_API;
   const token = localStorage.getItem("userToken");
 
@@ -27,7 +27,19 @@ export default function EventBookings() {
     },
   });
 
-  // ✅ Fetch bookings from API
+  // ✅ Toast setup
+  const showToast = (message, icon = "success") => {
+    Swal.fire({
+      toast: true,
+      position: "top-end",
+      icon,
+      title: message,
+      showConfirmButton: false,
+      timer: 2500,
+      timerProgressBar: true,
+    });
+  };
+
   useEffect(() => {
     fetchBookings();
   }, []);
@@ -61,34 +73,66 @@ export default function EventBookings() {
       }
     } catch (err) {
       console.error("Error fetching bookings:", err.response?.data || err.message);
+      showToast("Error fetching bookings", "error");
     } finally {
       setLoading(false);
     }
   };
 
-  // ✅ Update status API call with token
   const updateStatus = async (id, newStatus) => {
+    setUpdatingId(id);
+  
+    // Show initial processing toast
+    const toast = Swal.mixin({
+      toast: true,
+      position: "top-end",
+      showConfirmButton: false,
+      timerProgressBar: true,
+    });
+    
+    toast.fire({
+      icon: "info",
+      title: `${newStatus} in progress...`,
+      timer: 10000,
+    });
+  
     try {
-      setUpdatingId(id);
-
       const res = await axiosAuth.patch(`/updateBookingStatus/${id}`, {
         bookingId: id,
         status: newStatus.toLowerCase(),
       });
-
+  
       if (res.data.success) {
         setBookings((prev) =>
           prev.map((b) => (b.id === id ? { ...b, status: newStatus } : b))
         );
+  
+        // Update toast to success
+        toast.fire({
+          icon: "success",
+          title: `Booking ${newStatus} successfully!`,
+          timer: 2500,
+        });
+      } else {
+        toast.fire({
+          icon: "error",
+          title: `Failed to update status`,
+          timer: 2500,
+        });
       }
     } catch (err) {
       console.error("Error updating status:", err.response?.data || err.message);
+      toast.fire({
+        icon: "error",
+        title: "Error updating status",
+        timer: 2500,
+      });
     } finally {
       setUpdatingId(null);
     }
   };
+  
 
-  // ✅ Filters
   const handleFilterChange = (e) => {
     const { name, value } = e.target;
     setFilters((prev) => ({ ...prev, [name]: value }));
@@ -101,6 +145,7 @@ export default function EventBookings() {
       toDate: "",
       status: "All",
     });
+    showToast("Filters reset", "info");
   };
 
   const filteredBookings = bookings.filter((b) => {
@@ -183,43 +228,34 @@ export default function EventBookings() {
           Total Amount: ₹{totalAmount.toFixed(2)}
         </span>
       </div>
-{/* Approve All Button */}
-<div className="approve-all-container">
-  <button
-    className="btn-approve-all"
-    onClick={async () => {
-      const toApprove = filteredBookings.filter(b => b.status !== "Approved");
-      if (toApprove.length === 0) {
-        alert("All visible bookings are already approved!");
-        return;
-      }
 
-      for (const b of toApprove) {
-        await updateStatus(b.id, "Approved");
-      }
-      alert("All visible bookings approved successfully!");
-    }}
-    disabled={updatingId !== null}
-  >
-    Approve All
-  </button>
-</div>
+      {/* Approve All */}
+      <div className="approve-all-container">
+        <button
+          className="btn-approve-all"
+          onClick={async () => {
+            const toApprove = filteredBookings.filter(b => b.status !== "Approved");
+            if (toApprove.length === 0) {
+              showToast("All visible bookings are already approved!", "info");
+              return;
+            }
 
-      
+            for (const b of toApprove) {
+              await updateStatus(b.id, "Approved");
+            }
+            showToast("All visible bookings approved successfully!", "success");
+          }}
+          disabled={updatingId !== null}
+        >
+          Approve All
+        </button>
+      </div>
 
-      {/* Image Preview Modal */}
+      {/* Image Modal */}
       {viewImage && (
         <div className="image-modal" onClick={() => setViewImage(null)}>
-          <div
-            className="image-modal-content"
-            onClick={(e) => e.stopPropagation()}
-          >
-            <button
-              className="image-modal-close"
-              onClick={() => setViewImage(null)}
-            >
-              ✕
-            </button>
+          <div className="image-modal-content" onClick={(e) => e.stopPropagation()}>
+            <button className="image-modal-close" onClick={() => setViewImage(null)}>✕</button>
             <img src={viewImage} alt="Full view" />
           </div>
         </div>
@@ -230,7 +266,7 @@ export default function EventBookings() {
         <table className="custom-table">
           <thead>
             <tr>
-            <th>SI NO</th>
+              <th>SI NO</th>
               <th>ID</th>
               <th>KARTA NAME</th>
               <th>MOBILE</th>
@@ -252,71 +288,68 @@ export default function EventBookings() {
             </tr>
           </thead>
           <tbody>
-  {filteredBookings.map((b, index) => (
-    <tr key={b.id}>
-    
-      <td>{index + 1}</td> 
-     
-      <td>{b.id}</td>
-      <td>{b.name}</td>
-      <td>{b.mobile}</td>
-      <td>{b.seva}</td>
-      <td>{b.sevadate}</td>
-      <td>{b.gotra}</td>
-      <td>{b.nakshatra}</td>
-      <td>{b.raashi}</td>
-      <td>{b.district}</td>
-      <td>{b.state}</td>
-      <td>{b.address}</td>
-      <td>{b.pincode}</td>
-      <td>{b.bookeddate}</td>
-      <td>₹{b.amount.toFixed(2)}</td>
-      <td>{b.payment}</td>
-      <td>
-        <img
-          src={b.screenshot}
-          alt="screenshot"
-          width="60"
-          height="60"
-          style={{ cursor: "pointer" }}
-          onClick={() => setViewImage(b.screenshot)}
-        />
-      </td>
-      <td
-        className={
-          b.status === "Approved"
-            ? "status-approved"
-            : b.status === "Rejected"
-            ? "status-rejected"
-            : "status-pending"
-        }
-      >
-        {b.status}
-      </td>
-      <td>
-        <button
-          className="btn btn-success btn-sm"
-          onClick={() => updateStatus(b.id, "Approved")}
-          disabled={updatingId === b.id}
-        >
-          {updatingId === b.id && b.status !== "Approved"
-            ? "Approving..."
-            : "Approve"}
-        </button>
-        <button
-          className="btn btn-danger btn-sm"
-          onClick={() => updateStatus(b.id, "Rejected")}
-          disabled={updatingId === b.id}
-        >
-          {updatingId === b.id && b.status !== "Rejected"
-            ? "Rejecting..."
-            : "Reject"}
-        </button>
-      </td>
-    </tr>
-  ))}
-</tbody>
-
+            {filteredBookings.map((b, index) => (
+              <tr key={b.id}>
+                <td>{index + 1}</td>
+                <td>{b.id}</td>
+                <td>{b.name}</td>
+                <td>{b.mobile}</td>
+                <td>{b.seva}</td>
+                <td>{b.sevadate}</td>
+                <td>{b.gotra}</td>
+                <td>{b.nakshatra}</td>
+                <td>{b.raashi}</td>
+                <td>{b.district}</td>
+                <td>{b.state}</td>
+                <td>{b.address}</td>
+                <td>{b.pincode}</td>
+                <td>{b.bookeddate}</td>
+                <td>₹{b.amount.toFixed(2)}</td>
+                <td>{b.payment}</td>
+                <td>
+                  <img
+                    src={b.screenshot}
+                    alt="screenshot"
+                    width="60"
+                    height="60"
+                    style={{ cursor: "pointer" }}
+                    onClick={() => setViewImage(b.screenshot)}
+                  />
+                </td>
+                <td
+                  className={
+                    b.status === "Approved"
+                      ? "status-approved"
+                      : b.status === "Rejected"
+                      ? "status-rejected"
+                      : "status-pending"
+                  }
+                >
+                  {b.status}
+                </td>
+                <td>
+                  <button
+                    className="btn btn-success btn-sm"
+                    onClick={() => updateStatus(b.id, "Approved")}
+                    disabled={updatingId === b.id}
+                  >
+                    {updatingId === b.id && b.status !== "Approved"
+                      ? "Approving..."
+                      : "Approve"}
+                  </button>
+                  <button
+                    className="btn btn-danger btn-sm"
+                    onClick={() => updateStatus(b.id, "Rejected")}
+                    disabled={updatingId === b.id}
+                  >
+                    {updatingId === b.id && b.status !== "Rejected"
+                      ? "Rejecting..."
+                      : "Reject"}
+                  </button>
+                </td>
+              </tr>
+            ))}
+          </tbody>
         </table>
       </div>
     </div>

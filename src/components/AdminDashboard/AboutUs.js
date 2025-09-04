@@ -211,7 +211,7 @@ const axiosAuth = axios.create({
 
   // ---------------- UI ----------------
   return (
-    <div className="aboutus-page">
+    <div className="aboutus-page" id="activity-form">
       {/* Toast */}
       {toast.message && <div className={`toast ${toast.type}`}>{toast.message}</div>}
 
@@ -227,9 +227,9 @@ const axiosAuth = axios.create({
       {/* Missions */}
       {selectedType === "mission" && (
         <div className="aboutus-content">
-          <div className="aboutus-card">
-            <h3>{editingMission ? "Edit Mission" : "Add New Mission"}</h3>
-            <form onSubmit={editingMission ? handleUpdateMission : handleAddMission}>
+<div className="aboutus-card" id="mission-form">
+  <h3>{editingMission ? "Edit Mission" : "Add New Mission"}</h3>
+  <form onSubmit={editingMission ? handleUpdateMission : handleAddMission}>
               <textarea
                 rows={6}
                 value={missionText}
@@ -257,12 +257,17 @@ const axiosAuth = axios.create({
                 <div key={mission._id} className="mission-item">
                   <p>{mission.description}</p>
                   <div className="mission-actions">
-                    <button
-                      className="edit-btn"
-                      onClick={() => { setEditingMission(mission); setMissionText(mission.description); }}
-                    >
-                      Edit
-                    </button>
+                  <button
+                        className="edit-btn"
+                        onClick={() => {
+                          setEditingMission(mission);
+                          setMissionText(mission.description);
+                          document.getElementById("mission-form")?.scrollIntoView({ behavior: "smooth" });
+                        }}
+                      >
+                        Edit
+                      </button>
+
 
                     {deleteMissionId === mission._id ? (
                       <>
@@ -282,10 +287,10 @@ const axiosAuth = axios.create({
 
       {/* Activities */}
       {selectedType === "activities" && (
-        <div className="aboutus-content">
-          <div className="aboutus-card">
-            <h3>{editingActivity ? "Edit Activity" : "Add New Activity"}</h3>
-            <form onSubmit={editingActivity ? handleUpdateActivity : handleAddActivity}>
+        <div className="aboutus-content" >
+        <div className="aboutus-card" >
+  <h3>{editingActivity ? "Edit Activity" : "Add New Activity"}</h3>
+  <form onSubmit={editingActivity ? handleUpdateActivity : handleAddActivity}>
               <input type="text" placeholder="Enter title..." value={activityTitle} onChange={(e) => setActivityTitle(e.target.value)} />
               <textarea rows={4} placeholder="Enter description..." value={activityDescription} onChange={(e) => setActivityDescription(e.target.value)} />
               <input type="file" accept="image/*" onChange={handleImageChange} />
@@ -310,13 +315,20 @@ const axiosAuth = axios.create({
                   </div>
                   {activity.img && <img src={activity.img} alt={activity.title} className="activity-image" />}
                   <div className="activity-actions">
-                    <button className="edit-btn" onClick={() => {
-                      setEditingActivity(activity);
-                      setActivityTitle(activity.title);
-                      setActivityDescription(activity.description);
-                      setActivityImage(null);
-                      setPreviewImage(activity.img || null);
-                    }}>Edit</button>
+                  <button
+                      className="edit-btn"
+                      onClick={() => {
+                        setEditingActivity(activity);
+                        setActivityTitle(activity.title);
+                        setActivityDescription(activity.description);
+                        setActivityImage(null);
+                        setPreviewImage(activity.img || null);
+                        document.getElementById("activity-form")?.scrollIntoView({ behavior: "smooth" });
+                      }}
+                    >
+                      Edit
+                    </button>
+
 
                     {deleteActivityId === activity._id ? (
                       <>

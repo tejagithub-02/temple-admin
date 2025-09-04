@@ -2,7 +2,11 @@ import { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { FaUser, FaLock, FaEnvelope } from "react-icons/fa";
 import axios from "axios";
+import Swal from "sweetalert2";
 import "./Auth.css";
+
+const API_BASE = process.env.REACT_APP_BACKEND_API; // must end with /
+
 
 export default function Signup() {
   const [email, setEmail] = useState("");
@@ -14,50 +18,67 @@ export default function Signup() {
 
   const handleSignup = async (e) => {
     e.preventDefault();
-
+  
     if (!email || !name || !password || !confirmPassword || !role) {
-      alert("Please fill in all fields.");
+      Swal.fire({
+        icon: "warning",
+        title: "Missing Fields",
+        text: "Please fill in all fields.",
+        confirmButtonColor: "#6366f1",
+      });
       return;
     }
-
+  
     if (password !== confirmPassword) {
-      alert("Passwords do not match.");
+      Swal.fire({
+        icon: "error",
+        title: "Password Mismatch",
+        text: "Passwords do not match.",
+        confirmButtonColor: "#ef4444",
+      });
       return;
     }
-
+  
     try {
-      // API call
-      const res = await axios.post(
-        "https://testtapi1.ap-1.evennode.com/api/admin/adminRegistration",
-        {
-          name,
-          email,
-          password,
-          role,
-        }
-      );
-
+      const res = await axios.post(`${API_BASE}api/admin/adminRegistration`, {
+        name,
+        email,
+        password,
+      });
+  
       if (res.data.Status) {
-        alert(res.data.message);
-
-        // Save token / user details to localStorage
+        Swal.fire({
+          icon: "success",
+          title: "Signup Successful",
+          text: res.data.message,
+          timer: 2000,
+          showConfirmButton: false,
+        });
+  
         localStorage.setItem("userToken", res.data.data.tokens[0].token);
         localStorage.setItem("userRole", res.data.data.role);
         localStorage.setItem("userEmail", res.data.data.email);
-
-        navigate("/login");
+  
+        setTimeout(() => navigate("/login"), 2000); // redirect after popup
       } else {
-        alert("Signup failed. Please try again.");
+        Swal.fire({
+          icon: "error",
+          title: "Signup Failed",
+          text: "Please try again.",
+          confirmButtonColor: "#ef4444",
+        });
       }
     } catch (error) {
       console.error("Signup error:", error);
-      alert(
-        error.response?.data?.message ||
-          "Something went wrong. Please try again later."
-      );
+      Swal.fire({
+        icon: "error",
+        title: "Oops...",
+        text: error.response?.data?.message || "Something went wrong. Please try again later.",
+        confirmButtonColor: "#ef4444",
+      });
     }
   };
-
+  
   return (
     <div className="auth-container">
       <form className="auth-form" onSubmit={handleSignup}>
