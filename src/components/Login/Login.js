@@ -2,7 +2,7 @@ import { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { FaUser, FaLock } from "react-icons/fa";
 import axios from "axios";
-import Swal from "sweetalert2";   // ✅ Import SweetAlert2
+import Swal from "sweetalert2"; 
 import "./Auth.css";
 
 const API_BASE = process.env.REACT_APP_BACKEND_API; // must end with /

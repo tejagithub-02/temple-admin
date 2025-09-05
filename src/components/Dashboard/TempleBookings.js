@@ -1,12 +1,12 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import "./TempleBookings.css";
+import "./SevaBookings.css";
 
 const API_BASE = process.env.REACT_APP_BACKEND_API; // must end with /
 const token = localStorage.getItem("userToken");
 
 const axiosAuth = axios.create({
-  baseURL: `${API_BASE}api/savabooking`, 
+  baseURL: `${API_BASE}api/savabooking`,
   headers: {
     Authorization: token ? `Bearer ${token}` : "",
     "Content-Type": "application/json",
@@ -20,11 +20,12 @@ export default function SevaBookings() {
     toDate: "",
     status: "All",
     payment: "All",
+    sevaType: "All", // ✅ added sevaType filter
   });
   const [bookings, setBookings] = useState([]);
   const [loading, setLoading] = useState(true);
 
-  // ✅ Fetch bookings from API
+  // ✅ Fetch bookings
   useEffect(() => {
     const fetchBookings = async () => {
       try {
@@ -34,10 +35,25 @@ export default function SevaBookings() {
             id: idx + 1,
             name: b.karta_name,
             mobile: b.phone,
+            sevatype: b.sava_id?.category || "N/A", // ✅ category
+
             seva: b.sava_id?.name || "N/A",
-            sevadate: b.sava_id?.date
-              ? new Date(b.sava_id.date).toISOString().split("T")[0]
-              : "N/A",
+            // ✅ Seva date logic
+            sevadate: (() => {
+              if (b.sava_id?.category === "Event-Specific Sevas" && b.sava_id?.date) {
+                return new Date(b.sava_id.date).toISOString().split("T")[0];
+              } else if (b.sava_id?.category === "General Sevas") {
+                if (b.from_booking_date && b.to_booking_date) {
+                  const from = new Date(b.from_booking_date).toISOString().split("T")[0];
+                  const to = new Date(b.to_booking_date).toISOString().split("T")[0];
+                  return from === to ? from : `${from} → ${to}`;
+                } else if (b.from_booking_date) {
+                  return new Date(b.from_booking_date).toISOString().split("T")[0];
+                }
+              }
+              return "N/A";
+            })(),
+
             gotra: b.gotra,
             nakshatra: b.nakshatra,
             raashi: b.raashi,
@@ -46,14 +62,17 @@ export default function SevaBookings() {
             address: b.address,
             pincode: b.pincode,
             amount: b.sava_id?.price || 0,
-            payment: b.booking_type,   // 👈 payment type (UPI/offline/online)
+            payment: b.booking_type, // UPI / offline
             status: b.status,
           }));
-  
+
+          // ✅ only UPI + Offline
           const upiAndOffline = mapped.filter(
-            (b) => b.payment?.toLowerCase() === "upi" || b.payment?.toLowerCase() === "offline"
+            (b) =>
+              b.payment?.toLowerCase() === "upi" ||
+              b.payment?.toLowerCase() === "offline"
           );
-          
+
           setBookings(upiAndOffline);
         }
       } catch (error) {
@@ -62,10 +81,9 @@ export default function SevaBookings() {
         setLoading(false);
       }
     };
-  
+
     fetchBookings();
   }, []);
-  
 
   const handleFilterChange = (e) => {
     const { name, value } = e.target;
@@ -79,9 +97,11 @@ export default function SevaBookings() {
       toDate: "",
       status: "All",
       payment: "All",
+      sevaType: "All", // reset sevaType
     });
   };
 
+  // ✅ Apply filters
   const filteredBookings = bookings.filter((b) => {
     const afterFrom = !filters.fromDate || b.sevadate >= filters.fromDate;
     const beforeTo = !filters.toDate || b.sevadate <= filters.toDate;
@@ -92,19 +112,21 @@ export default function SevaBookings() {
       afterFrom &&
       beforeTo &&
       (filters.status === "All" || b.status === filters.status) &&
-      (filters.payment === "All" || b.payment === filters.payment)
+      (filters.payment === "All" || b.payment === filters.payment) &&
+      (filters.sevaType === "All" || b.sevatype === filters.sevaType)
     );
   });
 
   const totalAmount = filteredBookings.reduce((sum, b) => sum + b.amount, 0);
 
+  // ✅ CSV download
   const downloadCSV = () => {
     const headers = [
       "ID",
       "Name",
-     
       "Mobile",
       "Seva",
+      "Seva Type",
       "Seva Date",
       "Gotra",
       "Nakshatra",
@@ -121,9 +143,9 @@ export default function SevaBookings() {
     const rows = filteredBookings.map((b) => [
       b.id,
       b.name,
-     
       b.mobile,
       b.seva,
+      b.sevatype,
       b.sevadate,
       b.gotra,
       b.nakshatra,
@@ -154,8 +176,26 @@ export default function SevaBookings() {
     <div className="seva-bookings">
       <h2 className="page-heading">Temple Bookings</h2>
 
+      
+       
+
       {/* Filters */}
       <div className="filters">
+
+         {/* ✅ New Seva Type Filter */}
+         <div className="form-group">
+          <label>Seva Type</label>
+          <select
+            name="sevaType"
+            value={filters.sevaType}
+            onChange={handleFilterChange}
+          >
+            <option value="All">All</option>
+            <option value="General Sevas">General Sevas</option>
+            <option value="Event-Specific Sevas">Event-Specific Sevas</option>
+          </select>
+        </div>
+
         <div className="form-group">
           <label>Seva</label>
           <input
@@ -198,6 +238,7 @@ export default function SevaBookings() {
           </select>
         </div>
 
+
         <div className="form-group filter-actions">
           <button className="btn btn-secondary" onClick={resetFilters}>
             Reset
@@ -205,7 +246,7 @@ export default function SevaBookings() {
         </div>
       </div>
 
-      {/* Approve All, Total Amount & CSV Download */}
+      {/* Download & Summary */}
       <div className="approve-total">
         <button className="btn btn-info" onClick={downloadCSV}>
           Download CSV
@@ -215,7 +256,7 @@ export default function SevaBookings() {
         </span>
       </div>
 
-      {/* Scrollable Table */}
+      {/* Table */}
       <div className="table-container">
         {loading ? (
           <p>Loading bookings...</p>
@@ -225,9 +266,9 @@ export default function SevaBookings() {
               <tr>
                 <th>ID</th>
                 <th>NAME</th>
-             
                 <th>MOBILE</th>
                 <th>SEVA</th>
+                <th>SEVA TYPE</th>
                 <th>DATE</th>
                 <th>GOTRA</th>
                 <th>NAKSHATRA</th>
@@ -246,9 +287,9 @@ export default function SevaBookings() {
                 <tr key={b.id}>
                   <td>{b.id}</td>
                   <td>{b.name}</td>
-                 
                   <td>{b.mobile}</td>
                   <td>{b.seva}</td>
+                  <td>{b.sevatype}</td>
                   <td>{b.sevadate}</td>
                   <td>{b.gotra}</td>
                   <td>{b.nakshatra}</td>
