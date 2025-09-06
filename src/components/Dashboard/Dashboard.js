@@ -172,40 +172,61 @@ const DashboardStats = () => {
     document.body.removeChild(link);
   };
 
-  // CSV download for Temple bookings (approved Sevas only)
-  const downloadTempleCSV = () => {
-    const approvedBookings = sevaBookings.filter((b) => b.status?.toLowerCase() === "approved");
-    if (!approvedBookings.length) return alert("No temple bookings to export!");
-    const headers = [
-      "ID","Karta Name","Mobile","Seva","Seva Date","Gotra","Nakshatra",
-      "Raashi","District","State","Address","Pincode","Booked Date","Amount","Payment","Status"
-    ];
-    const rows = approvedBookings.map((b) => [
-      b._id,
-      b.karta_name,
-      b.phone,
-      b.sava_id?.name || "",
-      b.sava_id?.date?.split("T")[0] || b.from_booking_date?.split("T")[0] || "",
-      b.gotra,
-      b.nakshatra,
-      b.raashi,
-      b.district,
-      b.state,
-      `"${b.address}"`,
-      b.pincode,
-      b.createdAt?.split("T")[0] || "",
-      b.sava_id?.price || 0,
-      b.payment_screenshot ? "Online" : "Cash",
-      b.status.charAt(0).toUpperCase() + b.status.slice(1),
-    ]);
-    const csvContent = "data:text/csv;charset=utf-8," + [headers, ...rows].map(r => r.join(",")).join("\n");
-    const link = document.createElement("a");
-    link.setAttribute("href", encodeURI(csvContent));
-    link.setAttribute("download", "temple_bookings.csv");
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
+  const downloadTempleCSV = async () => {
+    try {
+      const res = await axiosAuthSeva.get("/getAll");
+      if (!res.data.success) return alert("No temple bookings to export!");
+  
+      const approvedBookings = res.data.data.filter(
+        (b) =>
+          b.status?.toLowerCase() === "approved" &&
+          (b.booking_type?.toLowerCase() === "upi" ||
+           b.booking_type?.toLowerCase() === "offline")
+      );
+  
+      if (!approvedBookings.length) return alert("No temple bookings to export!");
+  
+      const headers = [
+        "ID","Karta Name","Mobile","Seva","Seva Date","Gotra","Nakshatra",
+        "Raashi","District","State","Address","Pincode","Booked Date","Amount","Payment","Status"
+      ];
+  
+      const rows = approvedBookings.map((b) => [
+        b._id,
+        b.karta_name,
+        b.phone,
+        b.sava_id?.name || "",
+        b.sava_id?.date?.split("T")[0] || b.from_booking_date?.split("T")[0] || "",
+        b.gotra,
+        b.nakshatra,
+        b.raashi,
+        b.district,
+        b.state,
+        `"${b.address}"`,
+        b.pincode,
+        b.createdAt?.split("T")[0] || "",
+        b.sava_id?.price || 0,
+        b.booking_type ? b.booking_type.charAt(0).toUpperCase() + b.booking_type.slice(1) : "",
+        b.status.charAt(0).toUpperCase() + b.status.slice(1),
+      ]);
+  
+      const csvContent =
+        "data:text/csv;charset=utf-8," +
+        [headers, ...rows].map((r) => r.join(",")).join("\n");
+  
+      const link = document.createElement("a");
+      link.setAttribute("href", encodeURI(csvContent));
+      link.setAttribute("download", "temple_bookings.csv");
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+    } catch (err) {
+      console.error("Error downloading temple bookings:", err);
+      alert("Something went wrong while exporting temple bookings!");
+    }
   };
+  
+
 
   return (
     <>
