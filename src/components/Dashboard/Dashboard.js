@@ -225,9 +225,6 @@ const DashboardStats = () => {
       alert("Something went wrong while exporting temple bookings!");
     }
   };
-  
-
-
   return (
     <>
       <div className="stats-grid">
