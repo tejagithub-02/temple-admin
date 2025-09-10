@@ -2,37 +2,29 @@ import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import axios from "axios";
 import "./Dashboard.css";
-
 const DashboardStats = () => {
   const [eventStats, setEventStats] = useState({ pending: 0, approved: 0, rejected: 0 });
   const [sevaStats, setSevaStats] = useState({ pending: 0, approved: 0, rejected: 0 });
   const [templeCount, setTempleCount] = useState(0);
-
   const [loadingEvents, setLoadingEvents] = useState(true);
   const [loadingSevas, setLoadingSevas] = useState(true);
-
   const [eventBookings, setEventBookings] = useState([]);
   const [sevaBookings, setSevaBookings] = useState([]);
-
   const API_BASE = process.env.REACT_APP_BACKEND_API;
   const token = localStorage.getItem("userToken");
-
   const axiosAuthEvent = axios.create({
     baseURL: `${API_BASE}api/eventbooking`,
     headers: { Authorization: token ? `Bearer ${token}` : "" },
   });
-
   const axiosAuthSeva = axios.create({
     baseURL: `${API_BASE}api/savabooking`,
     headers: { Authorization: token ? `Bearer ${token}` : "" },
   });
-
   useEffect(() => {
     fetchEventStats();
     fetchSevaStats();
     fetchTempleCount();
   }, []);
-
   const fetchEventStats = async () => {
     try {
       setLoadingEvents(true);
@@ -228,11 +220,7 @@ const DashboardStats = () => {
   return (
     <>
       <div className="stats-grid">
-       
-
-       
-
-        <div className="stat-card">
+       <div className="stat-card">
           <h4>EVENTS</h4>
           {loadingEvents ? (
             <p>Loading...</p>
