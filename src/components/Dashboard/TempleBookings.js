@@ -102,22 +102,24 @@ export default function SevaBookings() {
     });
   };
 
-  const filteredBookings = bookings.filter((b) => {
+  const filteredBookings = bookings
+  .filter((b) => {
     const afterFrom = !filters.fromDate || b.sevadate >= filters.fromDate;
     const beforeTo = !filters.toDate || b.sevadate <= filters.toDate;
-  
+
     return (
       (filters.seva === "All" || b.seva === filters.seva) &&
       (!filters.mobile ||
-        b.mobile?.toLowerCase().includes(filters.mobile.toLowerCase())) && // ✅ mobile filter
+        b.mobile?.toLowerCase().includes(filters.mobile.toLowerCase())) &&
       afterFrom &&
       beforeTo &&
       (filters.status === "All" || b.status === filters.status) &&
       (filters.payment === "All" || b.payment === filters.payment) &&
       (filters.sevaType === "All" || b.sevatype === filters.sevaType)
     );
-  });
-  
+  })
+  .map((b, index) => ({ ...b, id: index + 1 })); // reset ID starting from 1
+
   
 
   const totalAmount = filteredBookings.reduce((sum, b) => sum + b.amount, 0);
@@ -125,7 +127,7 @@ export default function SevaBookings() {
   // ✅ CSV download
   const downloadCSV = () => {
     const headers = [
-      "ID",
+      "SI NO",
       "Name",
       "Mobile",
       "Seva",
@@ -284,7 +286,7 @@ export default function SevaBookings() {
           <table className="custom-table">
             <thead>
               <tr>
-                <th>ID</th>
+                <th>SI NO</th>
                 <th>NAME</th>
                 <th>MOBILE</th>
                 <th>SEVA</th>
