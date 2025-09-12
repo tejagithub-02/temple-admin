@@ -207,14 +207,19 @@ const RecurringEvents = () => {
         </div>
 
         <div className="form-group">
-        <label>Recurrence Pattern</label>
-        <input
-          type="text"
-          value="Yearly"
-          readOnly
-          className="readonly-input"
-        />
-      </div>
+  <label>Recurrence Pattern</label>
+  <select
+    className="readonly-input"
+    value={recurrencePattern}
+    onChange={(e) => setRecurrencePattern(e.target.value)}
+    required
+  >
+    <option value="yearly">Yearly</option>
+    <option value="monthly">Monthly</option>
+    <option value="weekly">Weekly</option>
+  </select>
+</div>
+
 
 
         <button type="submit" className="upload-button">
