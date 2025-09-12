@@ -15,16 +15,17 @@ const axiosAuth = axios.create({
 
 export default function SevaBookings() {
   const [filters, setFilters] = useState({
-    seva: "",
+    seva: "All",
     fromDate: "",
     toDate: "",
     status: "All",
     payment: "All",
-    sevaType: "All", // ✅ added sevaType filter
+    sevaType: "All", 
+    mobile:"",
   });
   const [bookings, setBookings] = useState([]);
   const [loading, setLoading] = useState(true);
-
+  const [sevaOptions, setSevaOptions] = useState([]); 
   // ✅ Fetch bookings
   useEffect(() => {
     const fetchBookings = async () => {
@@ -35,10 +36,8 @@ export default function SevaBookings() {
             id: idx + 1,
             name: b.karta_name,
             mobile: b.phone,
-            sevatype: b.sava_id?.category || "N/A", // ✅ category
-
+            sevatype: b.sava_id?.category || "N/A",
             seva: b.sava_id?.name || "N/A",
-            // ✅ Seva date logic
             sevadate: (() => {
               if (b.sava_id?.category === "Event-Specific Sevas" && b.sava_id?.date) {
                 return new Date(b.sava_id.date).toISOString().split("T")[0];
@@ -53,7 +52,6 @@ export default function SevaBookings() {
               }
               return "N/A";
             })(),
-
             gotra: b.gotra,
             nakshatra: b.nakshatra,
             raashi: b.raashi,
@@ -62,11 +60,10 @@ export default function SevaBookings() {
             address: b.address,
             pincode: b.pincode,
             amount: b.sava_id?.price || 0,
-            payment: b.booking_type, // UPI / offline
+            payment: b.booking_type,
             status: b.status,
           }));
 
-          // ✅ only UPI + Offline
           const upiAndOffline = mapped.filter(
             (b) =>
               b.payment?.toLowerCase() === "upi" ||
@@ -74,6 +71,10 @@ export default function SevaBookings() {
           );
 
           setBookings(upiAndOffline);
+
+          // ✅ Get unique seva names for dropdown
+          const uniqueSevas = [...new Set(upiAndOffline.map((b) => b.seva))];
+          setSevaOptions(uniqueSevas);
         }
       } catch (error) {
         console.error("Error fetching bookings:", error);
@@ -84,7 +85,6 @@ export default function SevaBookings() {
 
     fetchBookings();
   }, []);
-
   const handleFilterChange = (e) => {
     const { name, value } = e.target;
     setFilters((prev) => ({ ...prev, [name]: value }));
@@ -92,23 +92,24 @@ export default function SevaBookings() {
 
   const resetFilters = () => {
     setFilters({
-      seva: "",
+      seva: "All",
       fromDate: "",
       toDate: "",
       status: "All",
       payment: "All",
-      sevaType: "All", // reset sevaType
+      sevaType: "All",
+      mobile: "",
     });
   };
 
-  // ✅ Apply filters
   const filteredBookings = bookings.filter((b) => {
     const afterFrom = !filters.fromDate || b.sevadate >= filters.fromDate;
     const beforeTo = !filters.toDate || b.sevadate <= filters.toDate;
-
+  
     return (
-      (!filters.seva ||
-        b.seva?.toLowerCase().includes(filters.seva.toLowerCase())) &&
+      (filters.seva === "All" || b.seva === filters.seva) &&
+      (!filters.mobile ||
+        b.mobile?.toLowerCase().includes(filters.mobile.toLowerCase())) && // ✅ mobile filter
       afterFrom &&
       beforeTo &&
       (filters.status === "All" || b.status === filters.status) &&
@@ -116,6 +117,8 @@ export default function SevaBookings() {
       (filters.sevaType === "All" || b.sevatype === filters.sevaType)
     );
   });
+  
+  
 
   const totalAmount = filteredBookings.reduce((sum, b) => sum + b.amount, 0);
 
@@ -197,15 +200,32 @@ export default function SevaBookings() {
         </div>
 
         <div className="form-group">
-          <label>Seva</label>
-          <input
-            type="text"
-            name="seva"
-            value={filters.seva}
-            onChange={handleFilterChange}
-            placeholder="Enter seva name"
-          />
-        </div>
+  <label>Seva</label>
+  <select
+    name="seva"
+    value={filters.seva}
+    onChange={handleFilterChange}
+  >
+    <option value="All">All</option>
+    {sevaOptions.map((s, idx) => (
+      <option key={idx} value={s}>
+        {s}
+      </option>
+    ))}
+  </select>
+</div>
+
+        <div className="form-group">
+  <label>Mobile</label>
+  <input
+    type="text"
+    name="mobile"
+    value={filters.mobile}
+    onChange={handleFilterChange}
+    placeholder="Enter mobile number"
+  />
+</div>
+
         <div className="form-group">
           <label>From Date</label>
           <input

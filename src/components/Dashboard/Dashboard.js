@@ -163,7 +163,6 @@ const DashboardStats = () => {
     link.click();
     document.body.removeChild(link);
   };
-
   const downloadTempleCSV = async () => {
     try {
       const res = await axiosAuthSeva.get("/getAll");

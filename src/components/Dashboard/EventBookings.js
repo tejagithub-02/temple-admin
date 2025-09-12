@@ -5,13 +5,15 @@ import "./EventBookings.css";
 
 export default function EventBookings() {
   const [filters, setFilters] = useState({
-    seva: "",
+    seva: "All",
     fromDate: "",
     toDate: "",
     status: "All",
+    mobile:"",
   });
 
   const [bookings, setBookings] = useState([]);
+  const [sevas, setSevas] = useState([]); 
   const [loading, setLoading] = useState(true);
   const [viewImage, setViewImage] = useState(null);
   const [updatingId, setUpdatingId] = useState(null);
@@ -70,6 +72,9 @@ export default function EventBookings() {
           eventName: b.event_id?.event_name,
         }));
         setBookings(mapped);
+         
+         const uniqueSevas = [...new Set(mapped.map((b) => b.seva).filter(Boolean))];
+         setSevas(uniqueSevas);
       }
     } catch (err) {
       console.error("Error fetching bookings:", err.response?.data || err.message);
@@ -81,57 +86,27 @@ export default function EventBookings() {
 
   const updateStatus = async (id, newStatus) => {
     setUpdatingId(id);
-  
-    // Show initial processing toast
-    const toast = Swal.mixin({
-      toast: true,
-      position: "top-end",
-      showConfirmButton: false,
-      timerProgressBar: true,
-    });
-    
-    toast.fire({
-      icon: "info",
-      title: `${newStatus} in progress...`,
-      timer: 10000,
-    });
-  
     try {
       const res = await axiosAuth.patch(`/updateBookingStatus/${id}`, {
         bookingId: id,
         status: newStatus.toLowerCase(),
       });
-  
+
       if (res.data.success) {
         setBookings((prev) =>
           prev.map((b) => (b.id === id ? { ...b, status: newStatus } : b))
         );
-  
-        // Update toast to success
-        toast.fire({
-          icon: "success",
-          title: `Booking ${newStatus} successfully!`,
-          timer: 2500,
-        });
+        showToast(`Booking ${newStatus} successfully!`, "success");
       } else {
-        toast.fire({
-          icon: "error",
-          title: `Failed to update status`,
-          timer: 2500,
-        });
+        showToast("Failed to update status", "error");
       }
     } catch (err) {
       console.error("Error updating status:", err.response?.data || err.message);
-      toast.fire({
-        icon: "error",
-        title: "Error updating status",
-        timer: 2500,
-      });
+      showToast("Error updating status", "error");
     } finally {
       setUpdatingId(null);
     }
   };
-  
 
   const handleFilterChange = (e) => {
     const { name, value } = e.target;
@@ -140,10 +115,11 @@ export default function EventBookings() {
 
   const resetFilters = () => {
     setFilters({
-      seva: "",
+      seva: "All",
       fromDate: "",
       toDate: "",
       status: "All",
+      mobile:"",
     });
     showToast("Filters reset", "info");
   };
@@ -151,37 +127,57 @@ export default function EventBookings() {
   const filteredBookings = bookings.filter((b) => {
     const afterFrom = !filters.fromDate || b.sevadate >= filters.fromDate;
     const beforeTo = !filters.toDate || b.sevadate <= filters.toDate;
-
+    const matchMobile =
+      !filters.mobile ||
+      b.mobile?.toLowerCase().includes(filters.mobile.toLowerCase());
+  
     return (
-      (!filters.seva ||
-        b.seva.toLowerCase().includes(filters.seva.toLowerCase())) &&
+      (filters.seva === "All" || b.seva === filters.seva) &&
+      matchMobile &&   // ✅ mobile condition
       afterFrom &&
       beforeTo &&
       (filters.status === "All" || b.status === filters.status)
     );
   });
+  
 
   const totalAmount = filteredBookings.reduce((sum, b) => sum + b.amount, 0);
 
   if (loading) return <div>Loading bookings...</div>;
+
 
   return (
     <div className="seva-bookings">
       <h2 className="page-heading">Event Bookings</h2>
 
       {/* Filters */}
-      <div className="filters">
+       {/* Filters */}
+       <div className="filters">
         <div className="form-group">
           <label>Seva</label>
-          <input
-            type="text"
+          <select
             name="seva"
             value={filters.seva}
             onChange={handleFilterChange}
-            placeholder="Enter seva name"
-          />
+          >
+            <option value="All">All</option>
+            {sevas.map((s, idx) => (
+              <option key={idx} value={s}>
+                {s}
+              </option>
+            ))}
+          </select>
         </div>
-
+        <div className="form-group">
+  <label>Mobile</label>
+  <input
+    type="text"
+    name="mobile"
+    value={filters.mobile}
+    onChange={handleFilterChange}
+    placeholder="Enter mobile number"
+  />
+</div>
         <div className="form-group">
           <label>From Date</label>
           <input
@@ -191,6 +187,7 @@ export default function EventBookings() {
             onChange={handleFilterChange}
           />
         </div>
+
         <div className="form-group">
           <label>To Date</label>
           <input
@@ -228,6 +225,7 @@ export default function EventBookings() {
           Total Amount: ₹{totalAmount.toFixed(2)}
         </span>
       </div>
+    
 
       {/* Approve All */}
       <div className="approve-all-container">

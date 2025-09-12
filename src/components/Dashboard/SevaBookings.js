@@ -5,10 +5,11 @@ import "./SevaBookings.css";
 
 export default function SevaBookings() {
   const [filters, setFilters] = useState({
-    seva: "",
+    seva: "All",
     fromDate: "",
     toDate: "",
     status: "All",
+    mobile: "",
     
   });
 
@@ -16,6 +17,7 @@ export default function SevaBookings() {
   const [loading, setLoading] = useState(true);
   const [viewImage, setViewImage] = useState(null);
   const [updatingId, setUpdatingId] = useState(null);
+  const [sevaOptions, setSevaOptions] = useState([]);
 
   const API_BASE = process.env.REACT_APP_BACKEND_API;
   const token = localStorage.getItem("userToken");
@@ -33,7 +35,7 @@ export default function SevaBookings() {
     fetchBookings();
   }, []);
 
-  const fetchBookings = async () => {
+   const fetchBookings = async () => {
     try {
       setLoading(true);
       const res = await axiosAuth.get("/getAll");
@@ -53,12 +55,15 @@ export default function SevaBookings() {
           pincode: b.pincode,
           bookeddate: b.createdAt?.split("T")[0],
           amount: b.sava_id?.price || 0,
-payment: b.booking_type || "N/A",   // directly from backend
-
+          payment: b.booking_type || "N/A",
           screenshot: b.payment_screenshot,
           status: b.status.charAt(0).toUpperCase() + b.status.slice(1),
         }));
         setBookings(mapped);
+
+        // ✅ Populate unique seva names
+        const uniqueSevas = [...new Set(mapped.map((b) => b.seva).filter(Boolean))];
+        setSevaOptions(uniqueSevas);
       }
     } catch (err) {
       console.error("Error fetching bookings:", err.response?.data || err.message);
@@ -66,6 +71,7 @@ payment: b.booking_type || "N/A",   // directly from backend
       setLoading(false);
     }
   };
+
 
   const Toast = Swal.mixin({
     toast: true,
@@ -117,15 +123,17 @@ payment: b.booking_type || "N/A",   // directly from backend
       fromDate: "",
       toDate: "",
       status: "All",
- 
+ mobile:"",
     });
   };
 
   const filteredBookings = bookings.filter((b) => {
     const afterFrom = !filters.fromDate || b.sevadate >= filters.fromDate;
     const beforeTo = !filters.toDate || b.sevadate <= filters.toDate;
+  
     return (
-      (!filters.seva || b.seva.toLowerCase().includes(filters.seva.toLowerCase())) &&
+      (filters.seva === "All" || b.seva === filters.seva) &&   // ✅ dropdown filter
+      (!filters.mobile || b.mobile?.toLowerCase().includes(filters.mobile.toLowerCase())) && // ✅ mobile filter
       afterFrom &&
       beforeTo &&
       (filters.status === "All" || b.status === filters.status)
@@ -163,44 +171,53 @@ payment: b.booking_type || "N/A",   // directly from backend
     <div className="seva-bookings">
       <h2 className="page-heading">Seva Bookings</h2>
 
-      {/* Filters */}
       <div className="filters">
-        <div className="form-group">
-          <label>Seva</label>
-          <input
-            type="text"
-            name="seva"
-            value={filters.seva}
-            onChange={handleFilterChange}
-            placeholder="Enter seva name"
-          />
-        </div>
-        <div className="form-group">
-          <label>From Date</label>
-          <input type="date" name="fromDate" value={filters.fromDate} onChange={handleFilterChange} />
-        </div>
-        <div className="form-group">
-          <label>To Date</label>
-          <input type="date" name="toDate" value={filters.toDate} onChange={handleFilterChange} />
-        </div>
-        
+  <div className="form-group">
+    <label>Seva</label>
+    <select name="seva" value={filters.seva} onChange={handleFilterChange}>
+      <option value="All">All</option>
+      {sevaOptions.map((s, idx) => (
+        <option key={idx} value={s}>{s}</option>
+      ))}
+    </select>
+  </div>
 
-        <div className="form-group">
-          <label>Status</label>
-          <select name="status" value={filters.status} onChange={handleFilterChange}>
-            <option value="All">All</option>
-            <option value="Pending">Pending</option>
-            <option value="Approved">Approved</option>
-            <option value="Rejected">Rejected</option>
-          </select>
-        </div>
-      
-        <div className="form-group filter-actions">
-          <button className="btn btn-secondary" onClick={resetFilters}>
-            Reset
-          </button>
-        </div>
-      </div>
+  <div className="form-group">
+    <label>Mobile</label>
+    <input
+      type="text"
+      name="mobile"
+      value={filters.mobile}
+      onChange={handleFilterChange}
+      placeholder="Enter mobile number"
+    />
+  </div>
+
+  <div className="form-group">
+    <label>From Date</label>
+    <input type="date" name="fromDate" value={filters.fromDate} onChange={handleFilterChange} />
+  </div>
+
+  <div className="form-group">
+    <label>To Date</label>
+    <input type="date" name="toDate" value={filters.toDate} onChange={handleFilterChange} />
+  </div>
+
+  <div className="form-group">
+    <label>Status</label>
+    <select name="status" value={filters.status} onChange={handleFilterChange}>
+      <option value="All">All</option>
+      <option value="Pending">Pending</option>
+      <option value="Approved">Approved</option>
+      <option value="Rejected">Rejected</option>
+    </select>
+  </div>
+
+  <div className="form-group filter-actions">
+    <button className="btn btn-secondary" onClick={resetFilters}>Reset</button>
+  </div>
+</div>
+
 
       {/* Approve All & Total Amount */}
       <div className="approve-total">
