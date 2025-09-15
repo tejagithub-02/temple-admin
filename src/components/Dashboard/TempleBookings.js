@@ -179,7 +179,7 @@ export default function SevaBookings() {
 
   return (
     <div className="seva-bookings">
-      <h2 className="page-heading">Temple Bookings</h2>
+      <h2 className="page-heading">Temple(Seva) Bookings</h2>
 
       
        

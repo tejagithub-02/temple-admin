@@ -19,26 +19,20 @@ import {
 
 const DashboardSidebar = ({ isOpen, toggleSidebar }) => {
   const navigate = useNavigate(); 
-
   const handleLogout = () => {
- 
     localStorage.removeItem("token");
-    sessionStorage.clear();
-
-   
+    sessionStorage.clear(); 
     navigate("/login");
   };
-
   return (
     <div className={`dashboard-sidebar ${isOpen ? "open" : ""}`}>
       <nav className="sidebar-nav">
         <NavLink to="/dashboard" className="sidebar-link" onClick={toggleSidebar}>
           <FaTachometerAlt className="sidebar-icon" /> Dashboard
         </NavLink>
-
         <NavLink to="/banner" className="sidebar-link" onClick={toggleSidebar}>
           <FaImage className="sidebar-icon" /> Banner
-        </NavLink>
+      </NavLink>
 
         <NavLink to="/add-events" className="sidebar-link" onClick={toggleSidebar}>
           <FaCalendarAlt className="sidebar-icon" /> Add Events
