@@ -380,7 +380,7 @@ const DashboardStats = () => {
       "Amount",
       "Payment",
       "Status",
-      "Type",
+      
     ];
 
     const rows = combinedBookings.map((b) => [
@@ -412,7 +412,7 @@ const DashboardStats = () => {
 
     const link = document.createElement("a");
     link.setAttribute("href", encodeURI(csvContent));
-    link.setAttribute("download", "combined_bookings.csv");
+    link.setAttribute("download", "seva_bookings.csv");
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
@@ -466,7 +466,7 @@ const downloadTempleCSV = async () => {
 
     const link = document.createElement("a");
     link.setAttribute("href", encodeURI(csvContent));
-    link.setAttribute("download", "temple_bookings.csv");
+    link.setAttribute("download", "temple(seva)_bookings.csv");
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
@@ -507,16 +507,16 @@ const downloadTempleCSV = async () => {
       <div className="export-csv-wrapper">
         <div className="export-csv-card">
           <p className="export-csv-text">
-            Export all seva & event bookings data
+            Export all seva bookings data
           </p>
           <button className="export-csv-btn" onClick={downloadCombinedCSV}>
-            📥 Download Combined CSV
+            📥 Download Seva CSV
           </button>
         </div>
         <div className="export-csv-card">
-          <p className="export-csv-text">Export your temple bookings data</p>
+          <p className="export-csv-text">Export your temple(Seva) bookings data</p>
           <button className="export-csv-btn" onClick={downloadTempleCSV}>
-            📥 Download Temple CSV
+            📥 Download Temple(Seva) CSV
           </button>
         </div>
       </div>
