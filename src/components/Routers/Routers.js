@@ -18,6 +18,7 @@ import AboutUs from "../AdminDashboard/AboutUs";
 import ChangePassword from "../Login/ChangePassword";
 import Login from "../Login/Login"; 
 import SignUp from "../Login/SignUp";
+import CardManagement from "../AdminDashboard/CardManagement";
 
 // ✅ Protect routes
 const PrivateRoute = ({ isAuthenticated }) => {
@@ -30,11 +31,9 @@ const Routers = ({ isAuthenticated, setIsAuthenticated }) => {
    <Routes>
   {/* Default - always go to login when visiting "/" */}
   <Route path="/" element={<Navigate to="/login" replace />} />
-
   {/* Public - Login & Signup */}
   <Route path="/login" element={<Login setIsAuthenticated={setIsAuthenticated} />} />
   <Route path="/signup" element={<SignUp setIsAuthenticated={setIsAuthenticated} />} />
-
   {/* Private - Dashboard + Admin routes */}
   <Route element={<PrivateRoute isAuthenticated={isAuthenticated} />}>
     <Route element={<DashboardLayout />}>
@@ -42,8 +41,8 @@ const Routers = ({ isAuthenticated, setIsAuthenticated }) => {
       <Route path="/temple-bookings" element={<TempleBookings />} />
       <Route path="/event-bookings" element={<EventBookings />} />
       <Route path="/seva-bookings" element={<SevaBookings />} />
-
       <Route path="/banner" element={<Banner />} />
+      <Route path="/card-manager" element={<CardManagement />} />
       <Route path="/add-events" element={<Events />} />
       <Route path="/recurring-events" element={<RecurringEvents />} />
       <Route path="/gallery" element={<Gallery />} />
@@ -53,13 +52,10 @@ const Routers = ({ isAuthenticated, setIsAuthenticated }) => {
       <Route path="/add-sevas" element={<AddSevas />} />
       <Route path="/publications" element={<Publications />} />
       <Route path="/change-password" element={<ChangePassword />} />
-
-      {/* Catch-all */}
       <Route path="*" element={<Navigate to="/dashboard" replace />} />
     </Route>
   </Route>
 </Routes>
-
     </Router>
   );
 };

@@ -126,7 +126,7 @@ export default function SevaBookings() {
       fromDate: "",
       toDate: "",
       status: "All",
- mobile:"",
+      mobile:"",
     });
   };
 
