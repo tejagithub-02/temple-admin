@@ -2,8 +2,7 @@
   padding: 20px;
   font-family: Arial, sans-serif;
   background-color: #f4f7f9;
-  /* Increased max-width to give more space for the table */
-  max-width: calc(100vw - 100px); /* Example: Adjust this value as needed */
+  max-width: calc(100vw - 100px); 
   margin-left: 240px; 
   margin-top: 100px;
 }
