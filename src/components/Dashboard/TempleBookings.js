@@ -180,13 +180,8 @@ export default function SevaBookings() {
   return (
     <div className="seva-bookings">
       <h2 className="page-heading">Temple(Seva) Bookings</h2>
-
-      
-       
-
       {/* Filters */}
       <div className="filters">
-
          {/* ✅ New Seva Type Filter */}
          <div className="form-group">
           <label>Seva Type</label>
@@ -200,7 +195,6 @@ export default function SevaBookings() {
             <option value="Event-Specific Sevas">Event-Specific Sevas</option>
           </select>
         </div>
-
         <div className="form-group">
   <label>Seva</label>
   <select
@@ -216,8 +210,7 @@ export default function SevaBookings() {
     ))}
   </select>
 </div>
-
-        <div className="form-group">
+     <div className="form-group">
   <label>Mobile</label>
   <input
     type="text"
