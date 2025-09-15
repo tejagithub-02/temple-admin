@@ -18,14 +18,14 @@ import {
 } from "react-icons/fa";
 
 const DashboardSidebar = ({ isOpen, toggleSidebar }) => {
-  const navigate = useNavigate(); // ✅ now works
+  const navigate = useNavigate(); 
 
   const handleLogout = () => {
-    // Clear auth storage (adjust as per your app)
+ 
     localStorage.removeItem("token");
     sessionStorage.clear();
 
-    // Redirect to login page
+   
     navigate("/login");
   };
 
@@ -87,12 +87,12 @@ const DashboardSidebar = ({ isOpen, toggleSidebar }) => {
           <FaTachometerAlt className="sidebar-icon" /> Accountant
         </a>
 
-        {/* ✅ Fixed logout NavLink */}
+        
         <NavLink
           to="/logout"
           className="sidebar-link"
           onClick={(e) => {
-            e.preventDefault(); // stop NavLink default
+            e.preventDefault(); 
             toggleSidebar();
             handleLogout();
           }}
