@@ -119,9 +119,6 @@ export default function SevaBookings() {
     );
   })
   .map((b, index) => ({ ...b, id: index + 1 })); // reset ID starting from 1
-
-  
-
   const totalAmount = filteredBookings.reduce((sum, b) => sum + b.amount, 0);
 
   // ✅ CSV download
@@ -144,7 +141,6 @@ export default function SevaBookings() {
       "Payment",
       "Status",
     ];
-
     const rows = filteredBookings.map((b) => [
       b.id,
       b.name,
@@ -163,8 +159,7 @@ export default function SevaBookings() {
       b.payment,
       b.status,
     ]);
-
-    let csvContent =
+   let csvContent =
       "data:text/csv;charset=utf-8," +
       [headers, ...rows].map((e) => e.join(",")).join("\n");
 
@@ -176,7 +171,6 @@ export default function SevaBookings() {
     link.click();
     document.body.removeChild(link);
   };
-
   return (
     <div className="seva-bookings">
       <h2 className="page-heading">Temple(Seva) Bookings</h2>
@@ -220,8 +214,7 @@ export default function SevaBookings() {
     placeholder="Enter mobile number"
   />
 </div>
-
-        <div className="form-group">
+       <div className="form-group">
           <label>From Date</label>
           <input
             type="date"
@@ -239,7 +232,6 @@ export default function SevaBookings() {
             onChange={handleFilterChange}
           />
         </div>
-
         <div className="form-group">
           <label>Payment</label>
           <select
@@ -252,15 +244,12 @@ export default function SevaBookings() {
             <option value="offline">Cash</option>
           </select>
         </div>
-
-
         <div className="form-group filter-actions">
           <button className="btn btn-secondary" onClick={resetFilters}>
             Reset
           </button>
         </div>
       </div>
-
       {/* Download & Summary */}
       <div className="approve-total">
         <button className="btn btn-info" onClick={downloadCSV}>
@@ -270,7 +259,6 @@ export default function SevaBookings() {
           Total Amount: ₹{totalAmount.toFixed(2)}
         </span>
       </div>
-
       {/* Table */}
       <div className="table-container">
         {loading ? (
