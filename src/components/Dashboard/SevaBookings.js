@@ -5,6 +5,7 @@ import "./SevaBookings.css";
 
 export default function SevaBookings() {
   const [filters, setFilters] = useState({
+    sevaType: "All",
     seva: "All",
     fromDate: "",
     toDate: "",
@@ -44,6 +45,7 @@ export default function SevaBookings() {
           id: b._id,
           name: b.karta_name,
           mobile: b.phone,
+          sevaType: b.sava_id?.category || "",  
           seva: b.sava_id?.name || "",
           sevadate: b.sava_id?.date?.split("T")[0] || b.from_booking_date?.split("T")[0],
           gotra: b.gotra,
@@ -119,7 +121,8 @@ export default function SevaBookings() {
 
   const resetFilters = () => {
     setFilters({
-      seva: "",
+      sevaType: "All",
+      seva: "All",
       fromDate: "",
       toDate: "",
       status: "All",
@@ -132,6 +135,7 @@ export default function SevaBookings() {
     const beforeTo = !filters.toDate || b.sevadate <= filters.toDate;
   
     return (
+      (filters.sevaType === "All" || b.sevaType === filters.sevaType) &&
       (filters.seva === "All" || b.seva === filters.seva) &&   // ✅ dropdown filter
       (!filters.mobile || b.mobile?.toLowerCase().includes(filters.mobile.toLowerCase())) && // ✅ mobile filter
       afterFrom &&
@@ -172,6 +176,15 @@ export default function SevaBookings() {
       <h2 className="page-heading">Seva Bookings</h2>
 
       <div className="filters">
+      <div className="form-group">
+  <label>Seva Type</label>
+  <select name="sevaType" value={filters.sevaType} onChange={handleFilterChange}>
+    <option value="All">All</option>
+    <option value="General Sevas">General Sevas</option>
+    <option value="Event-Specific Sevas">Event-Specific Sevas</option>
+  </select>
+</div>
+
   <div className="form-group">
     <label>Seva</label>
     <select name="seva" value={filters.seva} onChange={handleFilterChange}>
@@ -246,6 +259,7 @@ export default function SevaBookings() {
               <th>ID</th>
               <th>KARTA NAME</th>
               <th>MOBILE</th>
+              <th>SEVA TYPE</th>
               <th>SEVA</th>
               <th>SEVA-DATE</th>
               <th>GOTRA</th>
@@ -272,6 +286,7 @@ export default function SevaBookings() {
       <td>{b.id}</td>
       <td>{b.name}</td>
       <td>{b.mobile}</td>
+      <td>{b.sevaType}</td>
       <td>{b.seva}</td>
       <td>{b.sevadate}</td>
       <td>{b.gotra}</td>
