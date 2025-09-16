@@ -539,8 +539,14 @@ const AddSevas = () => {
         );
       } else if (sevaType === "Event-Specific Sevas") {
         formData.append("date", date);
-        formData.append("recurring_id", selectedRecurringId);
+      
+        // Only append recurring_id if selected
+        if (selectedRecurringId && selectedRecurringId.trim() !== "") {
+          formData.append("recurring_id", selectedRecurringId);
+        }
       }
+      
+      
   
       if (image) formData.append("img", image);
   

@@ -41,6 +41,7 @@
     flex-direction: column;
     gap: 14px;
   }
+
   
   .card-box input,
   .card-box textarea {
@@ -109,6 +110,7 @@
   
   .card-item p {
     margin: 6px 0;
+    white-space: pre-line;
     font-size: 14px;
     color: #475569;
     line-height: 1.4;
@@ -138,7 +140,7 @@
   
   /* Buttons for edit/delete */
   .delete-btn {
-    background: #ef4444;
+    background: #ef4444 !important;
     color: white;
     border: none;
     padding: 6px 14px;
@@ -186,4 +188,62 @@
       height: auto;
     }
   }
-  
+  /* Toast container */
+.toast {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  min-width: 250px;
+  padding: 12px 18px;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 500;
+  color: #fff;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+  animation: slideIn 0.4s ease, fadeOut 0.4s ease 2.6s forwards;
+  z-index: 1000;
+  transition: all 0.3s ease-in-out;
+}
+
+/* Success toast */
+.toast.success {
+  background: linear-gradient(135deg, #4caf50, #2e7d32);
+  border-left: 6px solid #1b5e20;
+}
+
+/* Error toast */
+.toast.error {
+  background: linear-gradient(135deg, #f44336, #c62828);
+  border-left: 6px solid #b71c1c;
+}
+
+/* Info toast (optional) */
+.toast.info {
+  background: linear-gradient(135deg, #2196f3, #1565c0);
+  border-left: 6px solid #0d47a1;
+}
+
+/* Warning toast (optional) */
+.toast.warning {
+  background: linear-gradient(135deg, #ff9800, #ef6c00);
+  border-left: 6px solid #e65100;
+}
+
+/* Animations */
+@keyframes slideIn {
+  from {
+    transform: translateX(120%);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+@keyframes fadeOut {
+  to {
+    opacity: 0;
+    transform: translateX(120%);
+  }
+}

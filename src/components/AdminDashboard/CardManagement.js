@@ -124,7 +124,15 @@ const CardManagement = () => {
               <div key={card.id} className="card-item">
                 <div style={{ flex: 1 }}>
                   <h4>{card.title}</h4>
-                  <p>{card.description}</p>
+                  <p>
+                    {card.description.split("\n").map((line, i) => (
+                      <React.Fragment key={i}>
+                        {line}
+                        <br />
+                      </React.Fragment>
+                    ))}
+                  </p>
+
                 </div>
                 {card.img && (
                   <img src={card.img} alt={card.title} className="card-image" />

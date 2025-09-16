@@ -45,9 +45,9 @@ const DashboardSidebar = ({ isOpen, toggleSidebar }) => {
         <NavLink to="/recurring-events" className="sidebar-link" onClick={toggleSidebar}>
           <FaCalendarAlt className="sidebar-icon" /> Recurring Events
         </NavLink>
-        {/* <NavLink  to="/card-manager"  className="sidebar-link" onClick={toggleSidebar}>
+        <NavLink  to="/card-manager"  className="sidebar-link" onClick={toggleSidebar}>
         <FaIdCard className="sidebar-icon" /> Card Management
-        </NavLink> */}
+        </NavLink>
         <NavLink to="/aboutus" className="sidebar-link" onClick={toggleSidebar}>
           <FaInfoCircle className="sidebar-icon" /> About Us
         </NavLink>
