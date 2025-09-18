@@ -4,7 +4,6 @@ import { BrowserRouter as Router, Routes, Route, Navigate, Outlet } from "react-
 import DashboardLayout from "../Layout/DashboardLayout";
 import Dashboard from "../Dashboard/Dashboard";
 import TempleBookings from "../Dashboard/TempleBookings";
-
 import SevaBookings from "../Dashboard/SevaBookings";
 import Banner from "../AdminDashboard/Banner";
 import Events from "../AdminDashboard/Events";
