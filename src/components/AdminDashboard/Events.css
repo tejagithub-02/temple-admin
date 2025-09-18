@@ -294,7 +294,7 @@ h2 {
 }
 @media (max-width: 768px) {
   .events-container {
-    margin-top: 0;
+    margin-top:100px;
     margin-left: 0;
     padding: 12px 6px;
     min-height: auto;
