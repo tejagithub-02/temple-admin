@@ -1,12 +1,3 @@
-html, body {
-  height: 100%;
-  margin: 0;
-  padding: 0;
-  background: #f8fafc; /* match your container */
-  overflow-x: hidden; /* prevents horizontal white gap */
-}
-
-
 .events-container {
   margin-top: 100px;
   margin-left: 250px;
@@ -299,5 +290,24 @@ h2 {
   .event-dates-section {
     padding-left: 1px;
     padding-right: 1px;
+  }
+}
+@media (max-width: 768px) {
+  .events-container {
+    margin-top: 0;
+    margin-left: 0;
+    padding: 12px 6px;
+    min-height: auto;
+    width: 100vw;
+    max-width: 100vw;
+    box-sizing: border-box;
+    border-radius: 0;
+    box-shadow: none;
+  }
+}
+@media (max-width: 600px) {
+  .events-container {
+    padding: 8px 2px;
+    min-height: auto;
   }
 }
