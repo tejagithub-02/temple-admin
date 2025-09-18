@@ -53,7 +53,6 @@
 //       "Content-Type": "application/json",
 //     },
 //   });
-
 //   // ---------- Toast ----------
 //   const Toast = Swal.mixin({
 //     toast: true,
@@ -62,13 +61,11 @@
 //     timer: 2000,
 //     timerProgressBar: true,
 //   });
-
 //   // ---------- Fetch Bookings ----------
 //   useEffect(() => {
 //     fetchSevaBookings();
 //     fetchEventBookings();
 //   }, []);
-
 //   const fetchSevaBookings = async () => {
 //     try {
 //       setLoading(true);
@@ -107,7 +104,6 @@
 //       setLoading(false);
 //     }
 //   };
-
 //   const fetchEventBookings = async () => {
 //     try {
 //       setLoading(true);
@@ -144,7 +140,6 @@
 //       setLoading(false);
 //     }
 //   };
-
 //   // ---------- Status Update ----------
 //   const updateSevaStatus = async (id, newStatus) => {
 //     try {
@@ -683,7 +678,6 @@
 // }
 
 
-
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import Swal from "sweetalert2";
@@ -733,24 +727,14 @@ export default function BookingsPage() {
       "Content-Type": "application/json",
     },
   });
-
   const approveSevaWithWhatsapp = async (booking) => {
     try {
-      setUpdatingId(booking.id);
-  
-      // 1. Update status
+      setUpdatingId(booking.id);     
       await sevaAxios.patch(`/updateBookingStatus/${booking.id}`, {
         status: "approved",
-      });
-  
-      // 2. Generate PDF
+      });     
       const pdfBlob = await generateBookingPDF(booking);
-  
-      // 3. Prepare PDF filename with Seva name and date
       const pdfFileName = `${booking.seva.replace(/\s+/g, '')}_${booking.sevadate}.pdf`;
-      // Example: "GanapathiPooja_2025-09-16.pdf"
-  
-      // 4. Send PDF via WhatsApp API (example endpoint)
       const formData = new FormData();
       formData.append("mobile", booking.mobile);
       formData.append("pdf", pdfBlob, pdfFileName);

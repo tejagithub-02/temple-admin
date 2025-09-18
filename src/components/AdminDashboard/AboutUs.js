@@ -39,8 +39,6 @@ const axiosAuth = axios.create({
   },
 });
 
-
-
   // ---------------- Fetch Missions ----------------
   useEffect(() => {
     const fetchMissions = async () => {
