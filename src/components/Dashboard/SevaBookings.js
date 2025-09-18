@@ -357,13 +357,15 @@ export default function BookingsPage() {
               className="btn btn-success"
               onClick={async () => {
                 const toApprove = filteredSevaBookings.filter(
-                  (b) => b.status !== "Approved"
+                  (b) => b.status === "Pending"
                 );
                 for (const b of toApprove) {
                   await updateSevaStatus(b.id, "Approved");
                 }
               }}
-              disabled={updatingId !== null}
+              disabled={
+                updatingId !== null || !filteredSevaBookings.some((b) => b.status === "Pending")
+              }
             >
               Approve All Pending
             </button>
@@ -371,6 +373,7 @@ export default function BookingsPage() {
               Total Amount: ₹{totalSevaAmount.toFixed(2)}
             </span>
           </div>
+
 
           {/* Table */}
           <div className="table-container">
@@ -542,13 +545,15 @@ export default function BookingsPage() {
               className="btn btn-success"
               onClick={async () => {
                 const toApprove = filteredEventBookings.filter(
-                  (b) => b.status !== "Approved"
+                  (b) => b.status === "Pending"
                 );
                 for (const b of toApprove) {
                   await updateEventStatus(b.id, "Approved");
                 }
               }}
-              disabled={updatingId !== null}
+              disabled={
+                updatingId !== null || !filteredEventBookings.some((b) => b.status === "Pending")
+              }
             >
               Approve All
             </button>
@@ -556,6 +561,7 @@ export default function BookingsPage() {
               Total Amount: ₹{totalEventAmount.toFixed(2)}
             </span>
           </div>
+
 
           {/* Table */}
           <div className="table-container">
@@ -670,7 +676,6 @@ export default function BookingsPage() {
     </div>
   );
 }
-
 
 // import React, { useState, useEffect } from "react";
 // import axios from "axios";
@@ -1423,6 +1428,3 @@ export default function BookingsPage() {
 //     </div>
 //   );
 // }
-
-
-

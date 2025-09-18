@@ -12,7 +12,7 @@ const DashboardNavbar = ({ toggleSidebar }) => {
       </button>
       <div className="navbar-logo-title">
         <img src={logo} alt="Logo" className="navbar-logo" />
-        <span className="navbar-title">Sri JayaRama Seva Mandali</span>
+        <span className="navbar-title">Sri Jaya Rama Seva Mandali</span>
       </div>
     
     </div>

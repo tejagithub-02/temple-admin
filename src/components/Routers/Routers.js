@@ -4,7 +4,7 @@ import { BrowserRouter as Router, Routes, Route, Navigate, Outlet } from "react-
 import DashboardLayout from "../Layout/DashboardLayout";
 import Dashboard from "../Dashboard/Dashboard";
 import TempleBookings from "../Dashboard/TempleBookings";
-import EventBookings from "../Dashboard/EventBookings";
+
 import SevaBookings from "../Dashboard/SevaBookings";
 import Banner from "../AdminDashboard/Banner";
 import Events from "../AdminDashboard/Events";
@@ -39,7 +39,7 @@ const Routers = ({ isAuthenticated, setIsAuthenticated }) => {
     <Route element={<DashboardLayout />}>
       <Route path="/dashboard" element={<Dashboard />} />
       <Route path="/temple-bookings" element={<TempleBookings />} />
-      <Route path="/event-bookings" element={<EventBookings />} />
+     
       <Route path="/seva-bookings" element={<SevaBookings />} />
       <Route path="/banner" element={<Banner />} />
       <Route path="/card-manager" element={<CardManagement />} />
